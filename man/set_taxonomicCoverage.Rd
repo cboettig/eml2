@@ -29,16 +29,17 @@ If "sci_names" is a data frame, column names of the data frame are rank names.
 For user-defined "sci_names", users must make sure that the order of rank names
 they specify is from high to low.
 Ex. "Kingdom","Phylum","Class","Order","Family","Genus","Species","Common"
+EML permits any rank names provided they go in descending order.
 }
 \examples{
 
-sci_names <- data.frame(KINGDOM="Plantae",
-                 PHYLUM="Phaeophyta",
-                 CLASS="Phaeophyceae",
-                 ORDER="Laminariales",
-                 FAMILY="Lessoniaceae",
-                 GENUS="Macrocystis",
-                 SPECIES="pyrifera")
+sci_names <- data.frame(Kingdom="Plantae",
+                 Phylum="Phaeophyta",
+                 Class="Phaeophyceae",
+                 Order="Laminariales",
+                 Family="Lessoniaceae",
+                 Genus="Macrocystis",
+                 Species="pyrifera")
 taxon_coverage <- set_taxonomicCoverage(sci_names)
 
 # Query ITIS using taxize to fill in the full taxonomy given just species
@@ -53,12 +54,12 @@ taxon_coverage <- set_taxonomicCoverage(
   db = 'gbif')
 
  ## use a list of lists for multiple species
- sci_names <- list(list(KINGDOM="Plantae",
-                            PHYLUM="Phaeophyta",
-                            CLASS="Phaeophyceae",
-                            ORDER="Laminariales",
-                            FAMILY="Lessoniaceae",
-                            GENUS="Macrocystis",
-                            SPECIES="pyrifera"))
+ sci_names <- list(list(Kindom="Plantae",
+                            Phylum="Phaeophyta",
+                            Class="Phaeophyceae",
+                            Order="Laminariales",
+                            Family="Lessoniaceae",
+                            Genus="Macrocystis",
+                            Species="pyrifera"))
 set_taxonomicCoverage(sci_names)
 }

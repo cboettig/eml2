@@ -128,19 +128,19 @@ set_temporalCoverage <-
 #' For user-defined "sci_names", users must make sure that the order of rank names
 #' they specify is from high to low.
 #' Ex. "Kingdom","Phylum","Class","Order","Family","Genus","Species","Common"
+#' EML permits any rank names provided they go in descending order.
 #'
 #' @export
 #'
 #' @examples
-
 #'
-#' sci_names <- data.frame(KINGDOM="Plantae",
-#'                  PHYLUM="Phaeophyta",
-#'                  CLASS="Phaeophyceae",
-#'                  ORDER="Laminariales",
-#'                  FAMILY="Lessoniaceae",
-#'                  GENUS="Macrocystis",
-#'                  SPECIES="pyrifera")
+#' sci_names <- data.frame(Kingdom="Plantae",
+#'                  Phylum="Phaeophyta",
+#'                  Class="Phaeophyceae",
+#'                  Order="Laminariales",
+#'                  Family="Lessoniaceae",
+#'                  Genus="Macrocystis",
+#'                  Species="pyrifera")
 #' taxon_coverage <- set_taxonomicCoverage(sci_names)
 #'
 #' # Query ITIS using taxize to fill in the full taxonomy given just species
@@ -156,13 +156,13 @@ set_temporalCoverage <-
 #'   db = 'gbif')
 #'
 #'  ## use a list of lists for multiple species
-#'  sci_names <- list(list(KINGDOM="Plantae",
-#'                             PHYLUM="Phaeophyta",
-#'                             CLASS="Phaeophyceae",
-#'                             ORDER="Laminariales",
-#'                             FAMILY="Lessoniaceae",
-#'                             GENUS="Macrocystis",
-#'                             SPECIES="pyrifera"))
+#'  sci_names <- list(list(Kindom="Plantae",
+#'                             Phylum="Phaeophyta",
+#'                             Class="Phaeophyceae",
+#'                             Order="Laminariales",
+#'                             Family="Lessoniaceae",
+#'                             Genus="Macrocystis",
+#'                             Species="pyrifera"))
 #' set_taxonomicCoverage(sci_names)
 
 set_taxonomicCoverage <- function(sci_names, expand=FALSE, db = 'itis') {
@@ -173,10 +173,10 @@ set_taxonomicCoverage <- function(sci_names, expand=FALSE, db = 'itis') {
   if (class(sci_names) == "character" & !expand) {
     taxa <- lapply(strsplit(sci_names, " "), function(s) {
       list(
-        taxonRankName = "genus",
+        taxonRankName = "Genus",
         taxonRankValue = s[[1]],
         taxonomicClassification = list(
-            taxonRankName = "species",
+            taxonRankName = "Species",
             taxonRankValue = s[[2]]))
     })
     list(taxonomicClassification =  taxa)
