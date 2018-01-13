@@ -1,0 +1,22 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# eml2
+
+The goal of eml2 attempts to provide a rewrite of the EML R package based on a simple list structure (S3 classes).  EML's S4 class system made developing methods both clumsy and difficult.  
+
+
+The goal of `eml2` is to provide both a drop-in replacement for the higher-level functions of the existing EML package while also providing additional functionality.  
