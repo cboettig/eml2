@@ -52,15 +52,13 @@ set_TextType <- function(file = NULL, text = NULL) {
 
 
 set_section <- function(docbook) {
-  sections <- lapply(xml2::xml_find_all(docbook, "/article/sect1"), xml2::xml_children)
-  lapply(sections, function(x) xml_text)
+  lapply(xml2::xml_find_all(docbook, "/article/sect1"), as.character)
 }
 
 
 
 set_para <-  function(docbook) {
-  para <- xml2::xml_find_all(docbook, "/article/para")
-  lapply(para, function(x) xml_text)
+  lapply(xml2::xml_find_all(docbook, "/article/para"), as.character)
 }
 
 
@@ -93,6 +91,8 @@ to_docbook <- function(file = NULL) {
     ## File is already xml/docbook, so no need for pandoc
     docbook  <- xml2::read_xml(file)
   }
+
+  ## Unlike EML, treat this as literal!
   docbook
 
 }

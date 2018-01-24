@@ -10,12 +10,13 @@ vignette: >
 ---
 
 ```{r include=FALSE}
-has_pandoc <-  FALSE #rmarkdown::pandoc_available()
+has_pandoc <-  rmarkdown::pandoc_available()
 ```
 
 
 ```{r}
-library("eml2")
+library(eml2)
+library(emld)
 ```
 
 Here we construct a common EML file, including: 
@@ -263,15 +264,16 @@ methods <- NULL
 Individuals and organizations appear in many capacities in an EML document.  Meanwhile, R already has a native object class, `person` for describing individuals, which it uses in citations and package descriptions, among other things. We can use native R function `person()` to create an R `person` object.  Often it is more convenient to use R's coercion function, `as.person()`, to turn a string with standardized notation into a `person` class (Though this is not always reliable, for instance, in surnames containing whitespace).  However it is constructed, a `person` class can then be coerced into the appropriate EML object like so:
 
 ```{r}
-R_person <- as.person("Aaron Ellison <fakeaddress@email.com> [cre]")
-aaron <- as(R_person, "creator")
+R_person <- person("Aaron", "Ellison",,"fakeaddress@email.com", "cre", 
+                  c(ORCID = "0000-0003-4151-6081"))
+aaron <- as_emld(R_person)
 ```
 
 Likewise this method can be applied to a list of `person` objects:   
 
 ```{r}
-others <- c(as.person("Benjamin Baiser [ctb]"), as.person("Jennifer Sirota [ctb]"))
-associatedParty <- as(others, "associatedParty")
+others <- c(person("Benjamin Baiser"), as.person("Jennifer Sirota"))
+associatedParty <- as_emld(others)
 ```
 
 Note that R only permits certain codes such as `ctb` be be given in square brackets or as the `role` slot in a `person` object.  
@@ -302,7 +304,7 @@ publisher <- list(
 contact <- 
   list(
     individualName = aaron$individualName,
-    electronicMail = aaron$electronicMailAddress,
+    electronicMailAddress = aaron$electronicMailAddress,
     address = HF_address,
     organizationName = "Harvard Forest",
     phone = "000-000-0000")
@@ -406,6 +408,14 @@ eml <- list(
            "#system" = "uuid", # type of identifier
            dataset = dataset)
 
+```
+
+
+```{r}
+eml <- as_emld(eml)
+eml <- as_emld(emld:::drop_nulls(eml))
+
+as_json(eml, "eml.json")
 ```
 
 With our `eml` object fully constructed in R, we can now check that it is valid, conforming to all criteria set forth in the EML Schema.  This will ensure that other researchers and other software can readily parse and understand the contents of our metadata file:
