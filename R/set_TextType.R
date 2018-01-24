@@ -38,11 +38,11 @@
 #'
 set_TextType <- function(file = NULL, text = NULL) {
   if (!is.null(text)) {
-    TextType <- new("TextType", .Data = text)
+    TextType <-  text
   } else if (!is.null(file)) {
     docbook <- to_docbook(file)
     TextType <-
-      new("TextType",
+      list(
           section = set_section(docbook),
           para = set_para(docbook))
   }
@@ -53,17 +53,14 @@ set_TextType <- function(file = NULL, text = NULL) {
 
 set_section <- function(docbook) {
   sections <- lapply(xml2::xml_find_all(docbook, "/article/sect1"), xml2::xml_children)
-  s <- lapply(sections, function(x) new("section", list(x)))
-  as(s, "ListOfsection")
+  lapply(sections, function(x) xml_text)
 }
 
 
 
 set_para <-  function(docbook) {
   para <- xml2::xml_find_all(docbook, "/article/para")
-  s <- lapply(para, function(x)
-    new("para", list(x)))
-  as(s, "ListOfpara")
+  lapply(para, function(x) xml_text)
 }
 
 

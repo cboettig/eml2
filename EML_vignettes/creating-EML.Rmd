@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ```{r include=FALSE}
-has_pandoc <- rmarkdown::pandoc_available()
+has_pandoc <-  FALSE #rmarkdown::pandoc_available()
 ```
 
 
@@ -186,35 +186,15 @@ physical <- set_physical("hf205-01-TPexp1.csv")
 
 ## Assembling the `dataTable`
 
-Once we have defined the `attributeList` and `physical` file, we can now assemble the `dataTable` element itself. Unlike the `physical` and `attributeList` elements, there is no dedicated `set_` function for the `dataTable` element. `set_` functions are only provided for those elements that are both commonly used and have complex, nested structures in EML.  In contrast, once the `attributeList` and `physical` elements have been defined, a `dataTable` element is really quite simple.  Thus, we will use the default initialize method for the object, `new("dataTable", ...)` rather than a dedicated function, like so:
+Once we have defined the `attributeList` and `physical` file, we can now assemble the `dataTable` element itself. Unlike the `EML` R package, in `eml2` there is no need to call `new()` to create elements.  Everything is just a list.  Template lists for a given class can be viewed with the `emld::template()` function. 
 
 ```{r}
-dataTable <- new("dataTable",
+dataTable <- list(
                  entityName = "hf205-01-TPexp1.csv",
                  entityDescription = "tipping point experiment 1",
                  physical = physical,
                  attributeList = attributeList)
 ```
-
-## Sidebar: Understanding the `new()` method
-
-All elements in EML have associated `new()` initialize methods.  We could have constructed the `attributeList` or `physical` in the same way, but their nested structure would mean a lot of `new()` calls inside other `new()` calls (just take a look at the `set_physical` function for an example).  
-
-The `new()` methods are standard part of S4 objects in R, (though the EML package defines custom `initialize()` methods that make the `new()` methods more powerful).  The `new()` method always takes as as the first argument the name of the object to be created, e.g. `new("dataTable")`.  If we include nothing else, we get an empty `dataTable` element.  We may also specify values for any of the "slots" in the `dataTable`.  You can see a list of all possible slots of a given class using the (standard R function) `getSlots()`, giving the name of the object class, e.g.:
-
-```{r}
-getSlots("dataTable")
-```
-
-Each slot has not only a name but a class of object it expects to get.  If we provide an object of a different class, the method will automatically attempt to coerce it to the appropriate type.  For instance, we provide an object of class `physical` even though a `dataTable` expects the `physical` slot to be of class `ListOfphysical`, indicating that we could have multiple `physical` elements (e.g. when a single dataTable is split over multiple external files).  The `new()` method automatically coerces the single `physical` class object for us.  This makes the `new()` methods somewhat more convenient than creating a node first and then modifying the slots with the `@` subsetting; e.g.:
-
-```{r}
-example <- new("dataTable")
-#example@physical <- physical # Error -- wrong type.
-example@physical <- c(physical) # concat method promotes 1 or more arguments to a ListOf 
-```
-
-
 
 
 ## Coverage metadata
@@ -274,7 +254,7 @@ methods <- set_methods(methods_file)
 
 ```{r include=FALSE, eval=!has_pandoc}
 ## placeholder if pandoc is not installed
-methods <- new("methods")
+methods <- NULL
 ```
 
 
@@ -284,7 +264,7 @@ Individuals and organizations appear in many capacities in an EML document.  Mea
 
 ```{r}
 R_person <- as.person("Aaron Ellison <fakeaddress@email.com> [cre]")
-aaron <-as(R_person, "creator")
+aaron <- as(R_person, "creator")
 ```
 
 Likewise this method can be applied to a list of `person` objects:   
@@ -296,13 +276,13 @@ associatedParty <- as(others, "associatedParty")
 
 Note that R only permits certain codes such as `ctb` be be given in square brackets or as the `role` slot in a `person` object.  
 
-We can instead always use the default constructor method (`new()`) to create any of these elements, instead of the 
+We can instead always use the list approach to create any of these elements, instead of the 
 shorthand coercion methods shown above.  This permits a bit more flexibility, particularly for constructing elements
 where we want to include more metadata than R's `person` object knows about.  Here we define an `address` element
 first, since we can then re-use that element in defining both the contact person and publisher of the dataset:
 
 ```{r}
-HF_address <- new("address",
+HF_address <- list(
                   deliveryPoint = "324 North Main Street",
                   city = "Petersham",
                   administrativeArea = "MA",
@@ -312,7 +292,7 @@ HF_address <- new("address",
 
 
 ```{r}
-publisher <- new("publisher",
+publisher <- list(
                  organizationName = "Harvard Forest",
                  address = HF_address)
 ```
@@ -320,9 +300,9 @@ publisher <- new("publisher",
 
 ```{r}              
 contact <- 
-  new("contact",
-    individualName = aaron@individualName,
-    electronicMail = aaron@electronicMailAddress,
+  list(
+    individualName = aaron$individualName,
+    electronicMail = aaron$electronicMailAddress,
     address = HF_address,
     organizationName = "Harvard Forest",
     phone = "000-000-0000")
@@ -332,22 +312,25 @@ contact <-
 
 ## Creating a `keywordSet`
 
-Constructing the `keywordSet` for EML illustrates the use of the `new()` constructor methods and how they can be combined with basic R types such as character vectors, maximizing both flexibility and reuse of standard lists.
+Constructing the `keywordSet` is just a list of lists.  Note that everything is a list.
 
 ```{r}
-keywordSet <-
-  c(new("keywordSet",
+keywordSet <- list(
+    list(
         keywordThesaurus = "LTER controlled vocabulary",
-        keyword = c("bacteria",
+        keyword = list("bacteria",
                     "carnivorous plants",
                     "genetics",
-                    "thresholds")),
-    new("keywordSet",
+                    "thresholds")
+        ),
+    list(
         keywordThesaurus = "LTER core area",
-        keyword =  c("populations", "inorganic nutrients", "disturbance")),
-    new("keywordSet",
+        keyword =  list("populations", "inorganic nutrients", "disturbance")
+        ),
+    list(
         keywordThesaurus = "HFR default",
-        keyword = c("Harvard Forest", "HFR", "LTER", "USA")))
+        keyword = list("Harvard Forest", "HFR", "LTER", "USA")
+        ))
 ```
 
 
@@ -384,6 +367,7 @@ more information on LTER Network data access and use policies, please
 see: http://www.lternet.edu/data/netpolicy.html."
 ```
 
+<!--
 
 Many of these text fields can instead be read in from an external file that has richer formatting, such as we did with
 the `set_methods()` step.  Any text field containing a slot named `section` can import text data from a MS Word `.docx` file, markdown file, or other file format recognized by [Pandoc](http://pandoc.org) into that element.  For instance, here we import the same paragraph of text shown above for `abstract` from an external file (this time, a markdown-formatted file) instead:
@@ -392,13 +376,14 @@ the `set_methods()` step.  Any text field containing a slot named `section` can 
 abstract_file <-  system.file("examples/hf205-abstract.md", package = "EML")
 abstract <- as(set_TextType(abstract_file), "abstract")
 ```
- 
+
+-->
 
 We are now ready to add each of these elements we have created so far into our `dataset` element, like so:
 
 
 ```{r}
-dataset <- new("dataset",
+dataset <- list(
                title = title,
                creator = aaron,
                pubDate = pubDate,
@@ -416,9 +401,9 @@ dataset <- new("dataset",
 With the `dataset` in place, we are ready to declare our root `eml` element.  In addition to our `dataset` element we have already built, all we need is a packageId code and the system on which it is based.  Here we have generated a unique id using the standard `uuid` algorithm, which is available in the R package `uuid`.  
 
 ```{r}
-eml <- new("eml",
-           packageId = "f0cda3bf-2619-425e-b8be-8deb6bc6094d",  # from uuid::UUIDgenerate(),
-           system = "uuid", # type of identifier
+eml <- list(
+           "#packageId" = "f0cda3bf-2619-425e-b8be-8deb6bc6094d",  # from uuid::UUIDgenerate(),
+           "#system" = "uuid", # type of identifier
            dataset = dataset)
 
 ```
@@ -437,10 +422,5 @@ eml_validate("eml.xml")
 
 The validator returns a status `0` to indicate success.  Otherwise, the first error message encountered will be displayed. The most common reason for an error is probably the omission of a required metadata field. 
 
-We can also write this `eml` metadata out as an XML file that can be published alongside our data files:
-
-```{r eval=FALSE}
-write_eml(eml, "example.xml")
-```
 
 To take the greatest advantage of EML, we should consider depositing our file in a [Metacat](https://knb.ecoinformatics.org/knb/docs/intro.html)-enabled repository, which we discuss in the next vignette on using EML with data repositories.

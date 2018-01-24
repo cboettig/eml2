@@ -84,7 +84,7 @@ set_unitList <-
 
 
     if (is.null(unitTypes)) {
-      ListOfunitType <- new("ListOfunitType")
+      ListOfunitType <- NULL
     } else {
       if (is.null(unitTypes$name))
         unitTypes$name <- unitTypes$id
@@ -93,23 +93,21 @@ set_unitList <-
 
 
       types <- unique(unitTypes$id)
-      ListOfunitType <- as(lapply(types, function(type) {
+      ListOfunitType <- lapply(types, function(type) {
         dimensions <- unitTypes[(unitTypes$name == type),]
         ListOfdimension <-
-          as(lapply(1:dim(dimensions)[1], function(i) {
+          lapply(1:dim(dimensions)[1], function(i) {
             row <- dimensions[i, ]
-            new("dimension",
+            list(
                 name = row[["dimension"]],
                 power = na2empty(row[["power"]]))
-          }), "ListOfdimension")
-
-        new(
-          "unitType",
+          })
+        list(
           name = dimensions[["name"]][1],
           id = dimensions[["id"]][1],
           dimension = ListOfdimension
         )
-      }), "ListOfunitType")
+      })
 
 
     }
@@ -131,10 +129,9 @@ set_unitList <-
 
     ## Coerce all columns to characters
 
-    ListOfunit <- as(lapply(1:dim(units)[1], function(i) {
+    ListOfunit <- lapply(1:dim(units)[1], function(i) {
       row <- units[i, ]
-      new(
-        "unit",
+      list(
         id = row[["id"]],
         name = row[["name"]],
         abbreviation = na2empty(row[["abbreviation"]]),
@@ -144,13 +141,13 @@ set_unitList <-
         constantToSI = na2empty(as.character(row[["constantToSI"]])),
         description = na2empty(row[["description"]])
       )
-    }), "ListOfunit")
+    })
 
 
 
-    out <- new("unitList")
-    out@unitType <- ListOfunitType
-    out@unit <- ListOfunit
+    out <- list()
+    out$unitType <- ListOfunitType
+    out$unit <- ListOfunit
 
     if (as_metadata) {
       as(out, "additionalMetadata")
@@ -158,22 +155,6 @@ set_unitList <-
       out
     }
   }
-
-
-
-
-setOldClass("xml_nodeset")
-setOldClass("xml_document")
-## This is a terrible way to do coercion
-setAs("xml_document", "xml_nodeset", function(from){
-  xml_children(xml_root(xml_add_parent(from, "root")))
-})
-setAs("unitList", "additionalMetadata", function(from) {
-  xml_meta <- s4_to_xml(from)
-  xml_set_namespace(xml_meta,
-                  c(stmml =  "http://www.xml-cml.org/schema/stmml_1.1"))
-  new("additionalMetadata", metadata = new("metadata", list(as(xml_meta, "xml_nodeset"))))
-})
 
 
 

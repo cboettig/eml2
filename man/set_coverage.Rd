@@ -62,5 +62,4 @@ coverage <-
               geographicDescription = "California coast, down through Baja, Mexico",
               west = -122.44, east = -117.15,
               north = 37.38, south = 30.00)
-
 }

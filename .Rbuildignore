@@ -5,3 +5,4 @@ EML_vignettes/*
 ^README\.Rmd$
 ^README-.*\.png$
 ^LICENSE\.md$
+^data-raw$

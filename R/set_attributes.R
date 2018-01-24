@@ -74,10 +74,10 @@ set_attributes <-
       attributes <- add_na_column(x, attributes)
     }
 
-    out <- new("attributeList")
-    out@attribute <- as(lapply(1:dim(attributes)[1], function(i)
-      set_attribute(attributes[i,], factors = factors)),
-      "ListOfattribute")
+    out <- list()
+    out$attribute <-
+      lapply(1:dim(attributes)[1], function(i)
+        set_attribute(attributes[i,], factors = factors))
     out
   }
 
@@ -104,35 +104,28 @@ set_attribute <- function(row, factors = NULL) {
     } else {
       type <- "standardUnit"
     }
-    u <- new("unit")
-    slot(u, type) <- new(type, row[["unit"]])
-    node <- new(
-      s,
+
+    u <- setNames(list(list()), type)
+    u[[type]] <- row[["unit"]]
+    node <- list(
       unit = u,
-      precision = new("precision", na2empty(row[["precision"]])),
-      numericDomain = new(
-        "numericDomain",
-        numberType = new("numberType", row[["numberType"]]),
+      precision = row[["precision"]],
+      numericDomain = list(
+        numberType = row[["numberType"]],
         BoundsGroup = set_BoundsGroup(row)
       )
     )
   }
 
   if (s %in% c("ordinal", "nominal")) {
-    node <- new(s, nonNumericDomain = new("nonNumericDomain"))
+    node <- list(nonNumericDomain = list())
     if (row[["domain"]] == "textDomain") {
-      n <- new("ListOftextDomain",
-               list(
-                 new(
-                   "textDomain",
-                   definition = na2empty(row[["definition"]]),
-                   source = na2empty(row[["source"]]),
-                   pattern = list(new("pattern", na2empty(row[["pattern"]])))
-                 )
-               ))
-      node@nonNumericDomain@textDomain <- n
+      n <-  list(definition = row[["definition"]],
+                  source = row[["source"]],
+                  pattern =  row[["pattern"]])
+      node$nonNumericDomain$textDomain <- n
     } else if (row[["domain"]] == "enumeratedDomain") {
-      node@nonNumericDomain@enumeratedDomain <-
+      node$nonNumericDomain$enumeratedDomain <-
         set_enumeratedDomain(row, factors)
 
     }
@@ -144,32 +137,26 @@ set_attribute <- function(row, factors = NULL) {
       warning(paste0("The required formatString is missing for attribute ",
                      row[["attributeName"]]))
     }
-    node <- new(
-      "dateTime",
-      formatString = na2empty(row[["formatString"]]),
-      dateTimePrecision = na2empty(row[["precision"]]),
-      dateTimeDomain = new(
-        "dateTimeDomain",
+    node <- list(
+      formatString = row[["formatString"]],
+      dateTimePrecision = row[["precision"]],
+      dateTimeDomain = list(
         BoundsDateGroup = set_BoundsGroup(row, "BoundsDateGroup")
       )
     )
   }
 
-  measurementScale = new("measurementScale")
-  slot(measurementScale, s) <- node
+  measurementScale <- setNames(list(list()), s)
+  measurementScale[[s]] <- node
 
-  new(
-    "attribute",
+  list(
     attributeName = row[["attributeName"]],
     attributeDefinition = row[["attributeDefinition"]],
-    attributeLabel = na2empty(row[["attributeLabel"]]),
-    storageType = na2empty(row[["storageType"]]),
+    attributeLabel = row[["attributeLabel"]],
+    storageType = row[["storageType"]],
     missingValueCode = list(
-      new(
-        "missingValueCode",
-        code = na2empty(row[["missingValueCode"]]),
-        codeExplanation = na2empty(row[["missingValueCodeExplanation"]])
-      )
+        code = row[["missingValueCode"]],
+        codeExplanation = row[["missingValueCodeExplanation"]]
     ),
     measurementScale = measurementScale
   )
@@ -179,43 +166,34 @@ set_enumeratedDomain <- function(row, factors) {
   name <- row[["attributeName"]]
   df <- factors[factors$attributeName == name, ]
 
-  ListOfcodeDefinition <- as(lapply(1:dim(df)[1], function(i) {
-    new("codeDefinition",
+  ListOfcodeDefinition <- lapply(1:dim(df)[1], function(i) {
+    list(
         code = df[i, "code"],
         definition = df[i, "definition"])
-  }), "ListOfcodeDefinition")
-
-  new("ListOfenumeratedDomain",
-      list(
-        new("enumeratedDomain",
-            codeDefinition = ListOfcodeDefinition)
-      ))
+  })
+  list(codeDefinition = ListOfcodeDefinition)
 
 }
 
 set_BoundsGroup <- function(row, cls = "BoundsGroup") {
   if (!is.na(row[["minimum"]]))
-    minimum = new("minimum",
+    minimum = list(
                   na2empty(row[["minimum"]]),
-                  exclusive = new("xml_attribute", "false"))
+                  "#exclusive" =  "false")
   else
-    minimum <- new("minimum")
+    minimum <- NULL
 
   if (!is.na(row[["maximum"]]))
-    maximum = new("maximum",
+    maximum = list(
                   na2empty(row[["maximum"]]),
-                  exclusive = new("xml_attribute", "false"))
+                  "#exclusive" = "false")
   else
-    maximum <- new("maximum")
+    maximum <- NULL
 
 
-  new(cls,
-      bounds = as(list(
-        new("bounds",
+  list(bounds = list(
             minimum = minimum,
-            maximum = maximum)
-      ),
-      "ListOfbounds"))
+            maximum = maximum))
 }
 
 
@@ -535,4 +513,21 @@ check_factors <- function(factors){
                notequal$attributeName),
          call. = FALSE)
   }
+}
+
+
+#' is_standardUnit
+#'
+#' @param x name of unit to check
+#'
+#' @return TRUE if unit is exact match to the id of a unit in the Standard Units Table, FALSE otherwise.
+#' @export
+#'
+#' @examples
+#' is_standardUnit("amperePerMeter") # TRUE
+#' is_standardUnit("speciesPerSquareMeter") # FALSE
+is_standardUnit <- function(x) {
+  #standard_unit_list <- read.csv(system.file("units/standard_unit_list.csv", package = "EML"))
+  standard_unit_list <- standardUnits$units$id
+  (x %in% standard_unit_list)
 }

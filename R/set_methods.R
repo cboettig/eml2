@@ -21,38 +21,35 @@
 #' }
 set_methods <- function(methods_file,
                         instrumentation = character(),
-                        software = new("software"),
+                        software = NULL,
                         sampling_file = NULL,
-                        sampling_coverage = new("coverage"),
-                        sampling_citation = new("citation"),
+                        sampling_coverage = NULL,
+                        sampling_citation = NULL,
                         qualityControl_file = NULL) {
-  if (!is.null(sampling_file) && !isEmpty(sampling_coverage)) {
-    sampling <- new(
-      "sampling",
-      samplingDescription = as(set_TextType(sampling_file), "samplingDescription"),
-      studyExtent = new("studyExtent", coverage = sampling_coverage),
+  if (!is.null(sampling_file) && !is.null(sampling_coverage)) {
+    sampling <- list(
+      samplingDescription = set_TextType(sampling_file),
+      studyExtent = list(coverage = sampling_coverage),
       citation = sampling_citation
     )
   } else{
-    sampling <- new("sampling")
+    sampling <- NULL
   }
-  
+
   if (!is.null(qualityControl_file)) {
-    qualityControl <- new("qualityControl",
-                          description = as(set_TextType(qualityControl_file), "description")
+    qualityControl <- list(
+                          description = set_TextType(qualityControl_file)
                           )
   } else {
-    qualityControl <- new("qualityControl")
+    qualityControl <- NULL
   }
-  
-  methods <- new(
-    "methods",
+
+  methods <- list(
     sampling = sampling,
-    methodStep = new(
-      "methodStep",
+    methodStep = list(
       instrumentation = instrumentation,
       software = software,
-      description = as(set_TextType(methods_file), "description")
+      description = set_TextType(methods_file)
       )
   )
   methods
