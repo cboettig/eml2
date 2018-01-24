@@ -78,7 +78,8 @@ set_attributes <-
     out$attribute <-
       lapply(1:dim(attributes)[1], function(i)
         set_attribute(attributes[i,], factors = factors))
-    out
+
+    as_emld(out)
   }
 
 
@@ -112,7 +113,7 @@ set_attribute <- function(row, factors = NULL) {
       precision = row[["precision"]],
       numericDomain = list(
         numberType = row[["numberType"]],
-        BoundsGroup = set_BoundsGroup(row)
+        bounds = set_BoundsGroup(row)
       )
     )
   }
@@ -141,23 +142,25 @@ set_attribute <- function(row, factors = NULL) {
       formatString = row[["formatString"]],
       dateTimePrecision = row[["precision"]],
       dateTimeDomain = list(
-        BoundsDateGroup = set_BoundsGroup(row, "BoundsDateGroup")
+        bounds = set_BoundsGroup(row)
       )
     )
   }
 
   measurementScale <- setNames(list(list()), s)
   measurementScale[[s]] <- node
-
+  missingValueCode <- NULL
+  if(!is.na(row[["missingValueCode"]])){
+    missingValueCode <- list(
+      code = na2empty(row[["missingValueCode"]]),
+      codeExplanation = na2empty(row[["missingValueCodeExplanation"]]))
+  }
   list(
     attributeName = row[["attributeName"]],
     attributeDefinition = row[["attributeDefinition"]],
     attributeLabel = row[["attributeLabel"]],
     storageType = row[["storageType"]],
-    missingValueCode = list(
-        code = row[["missingValueCode"]],
-        codeExplanation = row[["missingValueCodeExplanation"]]
-    ),
+    missingValueCode = missingValueCode,
     measurementScale = measurementScale
   )
   }
@@ -175,7 +178,7 @@ set_enumeratedDomain <- function(row, factors) {
 
 }
 
-set_BoundsGroup <- function(row, cls = "BoundsGroup") {
+set_BoundsGroup <- function(row) {
   if (!is.na(row[["minimum"]]))
     minimum = list(
                   na2empty(row[["minimum"]]),
@@ -191,9 +194,8 @@ set_BoundsGroup <- function(row, cls = "BoundsGroup") {
     maximum <- NULL
 
 
-  list(bounds = list(
-            minimum = minimum,
-            maximum = maximum))
+   list(minimum = minimum,
+        maximum = maximum)
 }
 
 

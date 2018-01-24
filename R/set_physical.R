@@ -38,10 +38,10 @@ set_physical <- function(objectName,
                          literalCharacter = character(),
                          quoteCharacter = character(),
                          attributeOrientation = "column",
-                         size = character(),
+                         size = NULL,
                          sizeUnit = "bytes",
-                         authentication = character(),
-                         authMethod = character(),
+                         authentication = NULL,
+                         authMethod = NULL,
                          characterEncoding = character(),
                          encodingMethod = character(),
                          compressionMethod = character(),
@@ -70,12 +70,14 @@ set_physical <- function(objectName,
       warning(paste0("Automatically calculated file size using file.size(\"", objectName, "\")"))
       size <- as.character(file.size(objectName))
     }
+    size <- list(size = size, "#unit" = sizeUnit)
 
     if (length(authentication) == 0) {
       warning(paste0("Automatically calculated authentication size using digest::digest(\"", objectName, "\", algo = \"md5\", file = TRUE)"))
       authentication <- digest::digest(objectName, algo = "md5", file = TRUE)
       authMethod <- "MD5"
     }
+    authentication <- list(authentication = authentication, method = authMethod)
     # Fore the objectName to be set to the basename for the path just in case
     # the user intended this
     objectName <- basename(objectName)
@@ -84,8 +86,8 @@ set_physical <- function(objectName,
   out <-
     list(
       objectName = objectName,
-      size = list(size, unit = sizeUnit),
-      authentication = list(authentication, method = authMethod),
+      size = size,
+      authentication = authentication,
       compressionMethod = compressionMethod,
       encodingMethod = encodingMethod,
       characterEncoding = characterEncoding,

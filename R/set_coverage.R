@@ -48,7 +48,8 @@ set_coverage <-
            altitudeMaximum = numeric(),
            altitudeUnits = character()) {
 
-    list(geographicCoverage = set_geographicCoverage(
+    out <-
+      list(geographicCoverage = set_geographicCoverage(
               geographicDescription,
               westBoundingCoordinate,
               eastBoundingCoordinate,
@@ -57,8 +58,9 @@ set_coverage <-
               altitudeMinimum,
               altitudeMaximum,
               altitudeUnits),
-    temporalCoverage = set_temporalCoverage(beginDate, endDate, date),
-    taxonomicCoverage = set_taxonomicCoverage(sci_names))
+           temporalCoverage = set_temporalCoverage(beginDate, endDate, date),
+           taxonomicCoverage = set_taxonomicCoverage(sci_names))
+    as_emld(out)
   }
 
 
@@ -78,15 +80,15 @@ set_geographicCoverage <-
     ## Should permit G-Polygon definitions
     list(
       geographicDescription = geographicDescription,
-      geographicBoundingBox = list(
+      boundingCoordinates = list(
         westBoundingCoordinate = westBoundingCoordinate,
         eastBoundingCoordinate = eastBoundingCoordinate,
         northBoundingCoordinate = northBoundingCoordinate,
-        southBoundingCoordinate = southBoundingCoordinate),
-      boundingAltitudes = list(
-        altitudeMinimum = altitudeMinimum,
-        altitudeMaximum = altitudeMaximum,
-        altitudeUnits = altitudeUnits))
+        southBoundingCoordinate = southBoundingCoordinate,
+        boundingAltitudes = list(
+          altitudeMinimum = altitudeMinimum,
+          altitudeMaximum = altitudeMaximum,
+          altitudeUnits = altitudeUnits)))
 
   }
 
