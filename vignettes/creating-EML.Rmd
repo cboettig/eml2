@@ -208,9 +208,8 @@ region, time, or species.  In EML, these descriptions can take many forms,
 allowing for detailed descriptions as well as more general terms when such
 precision is not possible (such as geological epoch instead of date range,
 or higher taxonomic rank information in place of species definitions.)
-Coverage elements that take full advantage of this flexibility and
-precision should use the `new()` constructor functions for each element,
-as we will illustrate later.  Meanwhile, most common specifications can
+
+Most common specifications can
 be made using the more convenient but less flexible `set_coverage()`
 function in EML.  This function takes a date range or list of specific
 dates, a list of scientific names, a geographic description and bounding
@@ -229,16 +228,6 @@ coverage <-
                north = 37.38, south = 30.00,
                altitudeMin = 160, altitudeMaximum = 330,
                altitudeUnits = "meter")
-```
-
-
-
-Note that R's fuzzy matching permits shorter arguments like `west` instead
-of the full argument name, `westBoundingCoordinate`, in the above example.
-This results in the following `coverage` element:
-
-```{r}
-as_emld(coverage)
 ```
 
 
