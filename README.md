@@ -1,44 +1,24 @@
----
-output:
-  md_document:
-    variant: markdown_github
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+eml2
+====
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
+The goal of `eml2` is to provide both a drop-in replacement for the higher-level functions of the existing EML package while also providing additional functionality.
 
-# eml2
+`eml2` uses only simple and familiar list structures (S3 classes) instead of the more cumbersome use of S4 found in the original EML. While the higher-level functions are identical, this makes it easier to for most users and developers to work with `eml` objects and also to write their own functions for creating and manipulating EML objects. Under the hood, `eml2` relies on the [emld](https://github.com/cboettig/emld) package, which uses a Linked Data representation for EML. It is this approach which lets us combine the simplicity of lists with the specificy required by the XML schema.
 
+Creating EML
+------------
 
-The goal of `eml2` is to provide both a drop-in replacement for the higher-level functions of the existing EML package while also providing additional functionality.  
+Here we show a the creation of a relatively complete EML document using `eml2`. This closely parallels the function calls shown in the original EML [R-package vignette](https://ropensci.github.io/EML/articles/creating-EML.html).
 
-`eml2` uses only simple and familiar list structures (S3 classes) instead of the more cumbersome use of S4 found in the original EML.  While the higher-level functions are identical, this makes it easier to for most users and developers to work with `eml` objects and also to write their own functions for creating and manipulating EML objects.  Under the hood, `eml2` relies on the [emld](https://github.com/cboettig/emld) package, which uses a Linked Data representation for EML.  It is this approach which lets us combine the simplicity of lists with the specificy required by the XML schema.    
-
-## Creating EML
-
-Here we show a the creation of a relatively complete EML document using `eml2`.  This closely parallels the function calls shown in the original EML [R-package vignette](https://ropensci.github.io/EML/articles/creating-EML.html).  
-
-```{r include=FALSE}
-has_pandoc <-  rmarkdown::pandoc_available()
-```
-
-
-```{r message=FALSE, warning=FALSE}
+``` r
 library(eml2)
 library(emld)
 ```
 
-
 ### Coverage metadata
 
-```{r}
+``` r
 geographicDescription <- "Harvard Forest Greenhouse, Tom Swamp Tract (Harvard Forest)"
 coverage <- 
   set_coverage(begin = '2012-06-01', end = '2013-12-31',
@@ -50,35 +30,33 @@ coverage <-
                altitudeUnits = "meter")
 ```
 
+Creating methods
+----------------
 
-## Creating methods
+Read in methods written in a word doc:
 
-Read in methods written in a word doc: 
-
-```{r eval=has_pandoc}
+``` r
 methods_file <- system.file("examples/hf205-methods.docx", package = "EML")
 methods <- set_methods(methods_file)
 ```
 
+Creating parties
+----------------
 
-## Creating parties
-
-```{r}
+``` r
 R_person <- person("Aaron", "Ellison", ,"fakeaddress@email.com", "cre", 
                   c(ORCID = "0000-0003-4151-6081"))
 aaron <- as_emld(R_person)
 ```
 
-
-```{r}
+``` r
 others <- c(as.person("Benjamin Baiser"), as.person("Jennifer Sirota"))
 associatedParty <- as_emld(others)
 associatedParty[[1]]$role <- "Researcher"
 associatedParty[[2]]$role <- "Researcher"
 ```
 
-
-```{r}
+``` r
 HF_address <- list(
                   deliveryPoint = "324 North Main Street",
                   city = "Petersham",
@@ -87,14 +65,13 @@ HF_address <- list(
                   country = "USA")
 ```
 
-```{r}
+``` r
 publisher <- list(
                  organizationName = "Harvard Forest",
                  address = HF_address)
 ```
 
-
-```{r}              
+``` r
 contact <- 
   list(
     individualName = aaron$individualName,
@@ -102,15 +79,13 @@ contact <-
     address = HF_address,
     organizationName = "Harvard Forest",
     phone = "000-000-0000")
-
 ```
-
 
 ### Attribute Metadata
 
 Here we use attribute metadata and factor definitions as given from separate csv files.
 
-```{r}
+``` r
 attributes <- read.table(system.file("extdata/hf205_attributes.csv", package = "eml2"))
 factors <- read.table(system.file("extdata/hf205_factors.csv", package = "eml2"))
 attributeList <- 
@@ -126,19 +101,19 @@ attributeList <-
                                  "numeric"))
 ```
 
-
-## Data file format 
+Data file format
+----------------
 
 Default `.csv` format.
 
-```{r}
+``` r
 physical <- set_physical("hf205-01-TPexp1.csv")
 ```
 
-## Assembling the `dataTable`
+Assembling the `dataTable`
+--------------------------
 
-
-```{r}
+``` r
 dataTable <- list(
                  entityName = "hf205-01-TPexp1.csv",
                  entityDescription = "tipping point experiment 1",
@@ -146,12 +121,10 @@ dataTable <- list(
                  attributeList = attributeList)
 ```
 
+Creating a `keywordSet`
+-----------------------
 
-
-## Creating a `keywordSet`
-
-
-```{r}
+``` r
 keywordSet <- list(
     list(
         keywordThesaurus = "LTER controlled vocabulary",
@@ -170,10 +143,9 @@ keywordSet <- list(
         ))
 ```
 
-
 Lastly, some of the elements needed for `eml` object can simply be given as text strings.
 
-```{r}
+``` r
 pubDate <- "2012" 
 
 title <- "Thresholds and Tipping Points in a Sarracenia 
@@ -184,12 +156,12 @@ intellectualRights <- "http://www.lternet.edu/data/netpolicy.html."
 
 Read in an abstract written in Markdown:
 
-```{r eval=has_pandoc}
+``` r
 abstract_file <-  system.file("examples/hf205-abstract.md", package = "EML")
 abstract <- set_TextType(abstract_file)
 ```
 
-```{r}
+``` r
 dataset <- list(
                title = title,
                creator = aaron,
@@ -204,25 +176,19 @@ dataset <- list(
                dataTable = dataTable)
 ```
 
-
-```{r}
+``` r
 eml <- list(
            "#packageId" = uuid::UUIDgenerate(),  
            "#system" = "uuid",
            dataset = dataset)
-
 ```
 
-
-
-```{r}
+``` r
 write_eml(eml, "eml.xml")
 eml_validate("eml.xml")
+#> [1] FALSE
+#> attr(,"errors")
+#> [1] "Element 'para': This element is not expected."                                     
+#> [2] "Element 'section': Missing child element(s). Expected is one of ( para, section )."
+#> [3] "Element 'section': Missing child element(s). Expected is one of ( para, section )."
 ```
-
-
-
-```{r include = FALSE}
-unlink("eml.xml")
-```
-

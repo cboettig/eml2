@@ -218,7 +218,7 @@ boxes, as shown here:
 
 
 ```{r}
-geographicDescription <- "The Geographic region of the kelp bed data extends along the California coast, down through the coast of Baja, Mexico: Central California (Halfmoon Bay to Purisima Point), Southern California (Point Arguello to the United States/Mexico border including the Channel Islands) and Baja California (points south of the United States/Mexico border including several offshore islands)"
+geographicDescription <- "Harvard Forest Greenhouse, Tom Swamp Tract (Harvard Forest)"
 
 
 coverage <- 
@@ -432,3 +432,7 @@ The validator returns a status `0` to indicate success.  Otherwise, the first er
 
 
 To take the greatest advantage of EML, we should consider depositing our file in a [Metacat](https://knb.ecoinformatics.org/knb/docs/intro.html)-enabled repository, which we discuss in the next vignette on using EML with data repositories.
+
+```{r include=FALSE}
+unlink("eml.xml")
+```

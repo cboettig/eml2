@@ -6,3 +6,5 @@ EML_vignettes/*
 ^README-.*\.png$
 ^LICENSE\.md$
 ^data-raw$
+^\.travis\.yml$
+^codecov\.yml$

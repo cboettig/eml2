@@ -52,13 +52,18 @@ set_TextType <- function(file = NULL, text = NULL) {
 
 
 set_section <- function(docbook) {
-  lapply(xml2::xml_find_all(docbook, "/article/sect1/*"), as.character)
+  lapply(xml2::xml_find_all(docbook, "/article/sect1"),
+         function(x)
+           paste(lapply(xml_children(x), as.character),
+                 collapse = "\n")
+  )
 }
 
 
 
 set_para <-  function(docbook) {
-  lapply(xml2::xml_find_all(docbook, "/article/para"), as.character)
+  lapply(xml2::xml_find_all(docbook, "/article/para"),
+         function(x) as.character(xml2::xml_contents(x)))
 }
 
 

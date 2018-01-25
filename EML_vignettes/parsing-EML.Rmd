@@ -10,20 +10,17 @@ vignette: >
 ---
 
 
-# Crude view of an EML file
+# listviewer
 
-The function `eml_view()` allows, when the `listviewer` package is installed, to get a crude view of an EML file in the viewer. It can be useful for exploring the file.
+If the `listviewer` package is installed it can provide a convenient way to view and edit EML:
 
 ```{r, eval = FALSE}
-library("EML")
-f <- system.file("xsd/test/eml-i18n.xml", package = "EML")
-eml_view(f)
-
+f <- system.file("tests/eml.xml", package = "emld")
+eml <- read_eml(f)
+listviewer::jsonedit(eml)
 ```
 
 # Parsing an EML file
-
-The function `eml_get()` extracts a list of _all occurances_ the desired metadata elements from a given `eml` object or part thereof.  
 
 ```{r}
 library("EML")
