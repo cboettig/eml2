@@ -23,29 +23,22 @@ listviewer::jsonedit(eml)
 # Parsing an EML file
 
 ```{r}
-library("EML")
 f <- system.file("xsd/test/eml-i18n.xml", package = "EML")
 eml <- read_eml(f)
 ```
 
-Here we request all `coverage` elements occurring in the anywhere in the `eml` document:
+Here we request all `temporalCoverage` elements occurring in the anywhere in the `eml` document:
 
 ```{r}
-coverage <- eml_get(eml, "coverage")
-coverage
+temporalCoverage <- eml_get(eml, "temporalCoverage")
+temporalCoverage
 ```
 
-The result is a list containing 1 `coverage` element. We can further subset this element directly using `eml_get()` on it, for instance, to extract just the `temporalCoverage` element:
-
-```{r}
-eml_get(coverage, "temporalCoverage")
-```
 
 Any EML element can be extracted in this way. Let's try an example metadata file for a `dataset` that documents 11 seperate `dataTables`: 
 
 ```{r}
 hf001 <- system.file("examples/hf001.xml", package="EML") 
-
 eml_HARV <- read_eml(hf001)
 ```
 
@@ -59,7 +52,7 @@ length(dt)
 We can iterate over our list of `dataTable` elements to extract relevant metadata, such as the `entityName` or the download `url`:
 
 ```{r}
-entities <- sapply(dt, eml_get, "entityName")
+entities <- eml_get(eml_HARV, "dataTable.entityName")
 urls <- sapply(dt, eml_get, "url")
 ```
 
