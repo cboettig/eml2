@@ -14,18 +14,11 @@ set_unitList(units, unitTypes = NULL, as_metadata = FALSE)
 \item{as_metadata}{logical, default FALSE. If true, returns an `additionalMetadata` element, see below.}
 }
 \value{
-By default the function returns an S4 unitList object, like other set_ methods. If as_metadata is set to TRUE,
-function returns an `additionalMetadata` element, which can be added directly to an eml object (see examples),
-which is the usual location for declaring additional units.
-
-Note that EML permits a metadata element to contain arbitrary XML, including but
-not limited to unitList XML for custom units (which is really part of the stmml unit vocabulary used by EML, but
-part of a more general standard.) This means that once converted to a metadata element, the unit list is coerced
-into stmml XML and can no longer be subset or modified in the same way.
+unitList list object
 }
 \description{
 Define custom units, including new unitTypes.  Note that it is not necessary to define
-most common units, see get_unitList to display standard units or parse other custom unitList files.
+most common units.
 }
 \details{
 The units data.frame must have the following columns:
@@ -49,7 +42,6 @@ The unitType table must have the following columns:
  - power: the power to which the dimension is raised (NA implies power of 1)
 }
 \examples{
-
  ## create the "unitType" table for custom unit
  id = c("speed", "speed", "acceleration", "acceleration", "frequency")
  dimension = c("length", "time", "length", "time", "time")
@@ -69,13 +61,4 @@ The unitType table must have the following columns:
 
  unitList <- set_unitList(units, unitTypes)
 
- ## reverse operation also works:
- get_unitList(unitList)
-
- ## To add this to an EML document:
- new("eml", additionalMetadata = as(unitList, "additionalMetadata"))
-
- ## Equivalently:
- additionalMetadata <- set_unitList(units, unitTypes, as_metadata = TRUE)
- new("eml", additionalMetadata = additionalMetadata)
 }

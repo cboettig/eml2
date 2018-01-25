@@ -29,7 +29,6 @@ read_eml <- function(x){
 #' @export
 #' @import methods xml2
 #' @importFrom xml2 write_xml xml_set_namespace
-#' @importFrom uuid UUIDgenerate
 #' @examples
 #' f <- system.file("extdata", "example.xml", package = "emld")
 #' eml <- read_eml(f)
@@ -41,5 +40,6 @@ write_eml <- function(eml,
                       namespaces = NULL,
                       ns = "eml",
                       ...) {
+  ## FIXME consider having this add uuid automatically
   emld::as_xml(eml, file, ns = ns)
 }

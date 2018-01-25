@@ -8,8 +8,8 @@ set_physical(objectName, id = character(), numHeaderLines = character(),
   numFooterLines = character(), recordDelimiter = "\\\\n\\\\r",
   fieldDelimiter = ",", collapseDelimiters = logical(),
   literalCharacter = character(), quoteCharacter = character(),
-  attributeOrientation = "column", size = character(), sizeUnit = "bytes",
-  authentication = character(), authMethod = character(),
+  attributeOrientation = "column", size = NULL, sizeUnit = "bytes",
+  authentication = NULL, authMethod = NULL,
   characterEncoding = character(), encodingMethod = character(),
   compressionMethod = character(), url = character())
 }

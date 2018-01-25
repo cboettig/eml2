@@ -2,7 +2,6 @@
 #'
 #' set_attributes
 #' @param attributes a joined table of all attribute metadata
-#' (such as returned by \code{\link{get_attributes}}, see details)
 #' @param factors a table with factor code-definition pairs; see details
 #' @param col_classes optional, list of R column classes ('ordered', 'numeric', 'factor', 'Date', or 'character', case sensitive)
 #' will let the function infer missing 'domain' and 'measurementScale' values for attributes column.
