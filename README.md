@@ -105,7 +105,7 @@ keywordSet <- list(
 
 Of course, this assumes that we have some knowledge of what the possible terms permitted in an EML keywordSet are! Not so useful for novices. We can get a preview of the elements that any object can take using the `emld::template()` option, but this involves a two-part workflow. Instead, `eml2` provides generic `construct` methods for all objects. For instance, the function `construct$creator()` has arguments corresponding to each possible slot
 
-### Creating parties
+### Creating parties (creator, contact, publisher)
 
 ``` r
 aaron <- construct$creator(individualName = construct$individualName("Dr.", "Aaron", "Ellison"),
@@ -137,6 +137,8 @@ contact <-
     phone = "000-000-0000")
 ```
 
+### Putting it all together
+
 ``` r
 eml <- construct$eml(
            packageId = uuid::UUIDgenerate(),  
@@ -158,6 +160,9 @@ eml <- construct$eml(
                  attributeList = attributeList)
                ))
 ```
+
+Serialize and validate
+----------------------
 
 ``` r
 write_eml(eml, "eml.xml")
