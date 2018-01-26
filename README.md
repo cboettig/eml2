@@ -103,13 +103,21 @@ keywordSet <- list(
         ))
 ```
 
-Of course, this assumes that we have some knowledge of what the possible terms permitted in an EML keywordSet are! Not so useful for novices. We can get a preview of the elements that any object can take using the `emld::template()` option, but this involves a two-part workflow. Instead, `eml2` provides generic `construct` methods for all objects. For instance, the function `construct$creator()` has arguments corresponding to each possible slot
+Of course, this assumes that we have some knowledge of what the possible terms permitted in an EML keywordSet are! Not so useful for novices. We can get a preview of the elements that any object can take using the `emld::template()` option, but this involves a two-part workflow. Instead, `eml2` provides generic `construct` methods for all objects.
+
+Constructor methods
+-------------------
+
+For instance, the function `construct$creator()` has function arguments corresponding to each possible slot for a creator. This means we can rely on `tab completion` (and/or autocomplete previews in RStudio) to see what the possible options are. `construct$` functions exist for all complex types. If `construct$` does not exist for an argument (e.g. there is no `construct$givenName`), then the field takes a simple string argument.
 
 ### Creating parties (creator, contact, publisher)
 
 ``` r
-aaron <- construct$creator(individualName = construct$individualName("Dr.", "Aaron", "Ellison"),
-                           electronicMailAddress = "fakeaddress@email.com")
+aaron <- construct$creator(
+  individualName = construct$individualName(
+    givenName = "Aaron", 
+    surName = "Ellison"),
+  electronicMailAddress = "fakeaddress@email.com")
 ```
 
 ``` r
