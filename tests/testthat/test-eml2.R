@@ -122,8 +122,8 @@ dataset <- list(
 
 ## ------------------------------------------------------------------------
 eml <- list(
-  "#packageId" = uuid::UUIDgenerate(),
-  "#system" = "uuid",
+  packageId = uuid::UUIDgenerate(),
+  system = "uuid",
   dataset = dataset)
 
 

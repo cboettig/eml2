@@ -11,6 +11,15 @@ template_constructor <- function(object){
 }
 
 
-who <- readLines(system.file("extdata/complexTypes.txt", package="eml2"))
-names(who) <- who
-construct <- lapply(who, template_constructor)
+#who <- readLines(system.file("extdata/complexTypes.txt", package="eml2"))
+#names(who) <- who
+#construct <- lapply(who, template_constructor)
+
+#' construct
+#'
+#' @docType data
+#' @keywords datasets
+#' @name construct
+#' @usage construct$creator
+#' @format A list with constructor functions
+NULL

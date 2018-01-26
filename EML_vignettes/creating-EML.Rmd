@@ -396,8 +396,8 @@ With the `dataset` in place, we are ready to declare our root `eml` element.  In
 
 ```{r}
 eml <- list(
-           "#packageId" = "f0cda3bf-2619-425e-b8be-8deb6bc6094d",  # from uuid::UUIDgenerate(),
-           "#system" = "uuid", # type of identifier
+           packageId = uuid::UUIDgenerate(),
+           system = "uuid", # type of identifier
            dataset = dataset)
 
 ```
