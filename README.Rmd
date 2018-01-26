@@ -4,6 +4,10 @@ output:
     variant: markdown_github
 ---
 
+[![Build Status](https://travis-ci.org/cboettig/eml2.svg?branch=master)](https://travis-ci.org/cboettig/eml2)
+[![Coverage Status](https://img.shields.io/codecov/c/github/cboettig/eml2/master.svg)](https://codecov.io/github/cboettig/eml2?branch=master)
+[![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/joethorley/stability-badges#experimental)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}

@@ -18,7 +18,7 @@ Suggests: knitr,
     testthat,
     covr,
     EML
-Imports: xml2, methods, digest, emld, jqr
+Imports: xml2, methods, digest, emld, jqr, jsonlite
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Remotes: cboettig/emld

@@ -17,6 +17,8 @@
 #' }
 #' @export
 #' @importFrom jqr jq
+#' @importFrom emld as_json
+#' @importFrom jsonlite fromJSON
 eml_get <- function(x, element, ...){
   doc <- as.character(as_json(as_emld(x)))
   out <- jq(doc, paste0("..|.", element, "? // empty"))

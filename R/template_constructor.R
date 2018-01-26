@@ -1,5 +1,5 @@
 
-#' eml_creator <- template_constructor("creator")
+# eml_creator <- template_constructor("creator")
 template_constructor <- function(object){
   args <- emld::template(object)
   f <- paste0("function(",
@@ -20,6 +20,5 @@ template_constructor <- function(object){
 #' @docType data
 #' @keywords datasets
 #' @name construct
-#' @usage construct$creator
 #' @format A list with constructor functions
 NULL

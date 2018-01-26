@@ -5,9 +5,6 @@
 \alias{construct}
 \title{construct}
 \format{A list with constructor functions}
-\usage{
-construct$creator
-}
 \description{
 construct
 }
