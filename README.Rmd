@@ -36,7 +36,6 @@ has_pandoc <-  rmarkdown::pandoc_available()
 
 ```{r message=FALSE, warning=FALSE}
 library(eml2)
-library(emld)
 ```
 
 

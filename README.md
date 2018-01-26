@@ -15,7 +15,6 @@ Here we show a the creation of a relatively complete EML document using `eml2`. 
 
 ``` r
 library(eml2)
-library(emld)
 ```
 
 `set_*` methods
