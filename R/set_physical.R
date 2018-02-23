@@ -67,13 +67,16 @@ set_physical <- function(objectName,
 
   if (file.exists(objectName)) {
     if (length(size) == 0) {
-      warning(paste0("Automatically calculated file size using file.size(\"", objectName, "\")"))
+      warning(paste0(
+        "Automatically calculated file size using file.size(\"", objectName, "\")"))
       size <- as.character(file.size(objectName))
     }
     size <- list(size = size, "#unit" = sizeUnit)
 
     if (length(authentication) == 0) {
-      warning(paste0("Automatically calculated authentication size using digest::digest(\"", objectName, "\", algo = \"md5\", file = TRUE)"))
+      warning(paste0(
+        "Automatically calculated authentication size using digest::digest(\"",
+        objectName, "\", algo = \"md5\", file = TRUE)"))
       authentication <- digest::digest(objectName, algo = "md5", file = TRUE)
       authMethod <- "MD5"
     }

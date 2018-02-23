@@ -2,7 +2,8 @@ library(eml2)
 library(emld)
 
 ## ------------------------------------------------------------------------
-geographicDescription <- "Harvard Forest Greenhouse, Tom Swamp Tract (Harvard Forest)"
+geographicDescription <-
+  "Harvard Forest Greenhouse, Tom Swamp Tract (Harvard Forest)"
 coverage <-
   set_coverage(begin = '2012-06-01', end = '2013-12-31',
                sci_names = "Sarracenia purpurea",
@@ -52,8 +53,10 @@ contact <-
 
 
 ## ------------------------------------------------------------------------
-attributes <- read.table(system.file("extdata/hf205_attributes.csv", package = "eml2"))
-factors <- read.table(system.file("extdata/hf205_factors.csv", package = "eml2"))
+attributes <- read.table(system.file("extdata/hf205_attributes.csv",
+                                     package = "eml2"))
+factors <- read.table(system.file("extdata/hf205_factors.csv",
+                                  package = "eml2"))
 attributeList <-
   set_attributes(attributes,
                  factors,

@@ -187,7 +187,8 @@ set_taxonomicCoverage <- function(sci_names, expand=FALSE, db = 'itis') {
   } else if (class(sci_names) == "list") {
     set_taxonomicCoverage.list(sci_names)
   } else {
-    stop("Incorrect format: sci_names can only be character string, data.frame or list")
+    stop("Incorrect format: sci_names
+can only be character string, data.frame or list")
   }
 }
 
@@ -232,14 +233,18 @@ set_taxonomicCoverage.list <- function(sci_names){
 expand_scinames <- function(sci_names, db){
   if (!requireNamespace("taxize", quietly = TRUE)) {
     stop(call. = FALSE,
-         "Expansion of scientific names requires the 'taxize' package to be installed. Install taxize or set expand to FALSE.")
+"Expansion of scientific names requires the
+'taxize' package to be installed. Install taxize or set expand to FALSE.")
   }
   classifications <- taxize::classification(sci_names, db = db)
   # Remove any NAs and warn for each
   if (any(is.na(classifications))) {
     warning(call. = FALSE,
-            paste0("Some scientific names were not found in the taxonomic database and were not expanded: ",
-                   paste0(sci_names[which(is.na(classifications))], collapse = ","), "."))
+            paste0(
+"Some scientific names were not found in the
+taxonomic database and were not expanded: ",
+                   paste0(sci_names[which(is.na(classifications))],
+                          collapse = ","), "."))
   }
   # Turn result into a list of named lists where names are the rank name and
   # values are the rank value

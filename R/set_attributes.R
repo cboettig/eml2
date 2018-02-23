@@ -49,8 +49,8 @@ set_attributes <-
     attributes <-
       check_and_complete_attributes(attributes, col_classes)
 
-   # check factors
-    if(nrow(factors) != 0){
+    # check factors
+    if (nrow(factors) != 0) {
       check_factors(factors)
     }
 
@@ -76,7 +76,7 @@ set_attributes <-
     out <- list()
     out$attribute <-
       lapply(1:dim(attributes)[1], function(i)
-        set_attribute(attributes[i,], factors = factors))
+        set_attribute(attributes[i, ], factors = factors))
 
     as_emld(out)
   }
@@ -110,10 +110,8 @@ set_attribute <- function(row, factors = NULL) {
     node <- list(
       unit = u,
       precision = row[["precision"]],
-      numericDomain = list(
-        numberType = row[["numberType"]],
-        bounds = set_BoundsGroup(row)
-      )
+      numericDomain = list(numberType = row[["numberType"]],
+                           bounds = set_BoundsGroup(row))
     )
   }
 
@@ -121,8 +119,8 @@ set_attribute <- function(row, factors = NULL) {
     node <- list(nonNumericDomain = list())
     if (row[["domain"]] == "textDomain") {
       n <-  list(definition = row[["definition"]],
-                  source = row[["source"]],
-                  pattern =  row[["pattern"]])
+                 source = row[["source"]],
+                 pattern =  row[["pattern"]])
       node$nonNumericDomain$textDomain <- n
     } else if (row[["domain"]] == "enumeratedDomain") {
       node$nonNumericDomain$enumeratedDomain <-
@@ -140,19 +138,16 @@ set_attribute <- function(row, factors = NULL) {
     node <- list(
       formatString = row[["formatString"]],
       dateTimePrecision = row[["precision"]],
-      dateTimeDomain = list(
-        bounds = set_BoundsGroup(row)
-      )
+      dateTimeDomain = list(bounds = set_BoundsGroup(row))
     )
   }
 
   measurementScale <- setNames(list(list()), s)
   measurementScale[[s]] <- node
   missingValueCode <- NULL
-  if(!is.na(row[["missingValueCode"]])){
-    missingValueCode <- list(
-      code = na2empty(row[["missingValueCode"]]),
-      codeExplanation = na2empty(row[["missingValueCodeExplanation"]]))
+  if (!is.na(row[["missingValueCode"]])) {
+    missingValueCode <- list(code = na2empty(row[["missingValueCode"]]),
+                             codeExplanation = na2empty(row[["missingValueCodeExplanation"]]))
   }
   list(
     attributeName = row[["attributeName"]],
@@ -166,12 +161,11 @@ set_attribute <- function(row, factors = NULL) {
 
 set_enumeratedDomain <- function(row, factors) {
   name <- row[["attributeName"]]
-  df <- factors[factors$attributeName == name, ]
+  df <- factors[factors$attributeName == name,]
 
   ListOfcodeDefinition <- lapply(1:dim(df)[1], function(i) {
-    list(
-        code = df[i, "code"],
-        definition = df[i, "definition"])
+    list(code = df[i, "code"],
+         definition = df[i, "definition"])
   })
   list(codeDefinition = ListOfcodeDefinition)
 
@@ -179,22 +173,19 @@ set_enumeratedDomain <- function(row, factors) {
 
 set_BoundsGroup <- function(row) {
   if (!is.na(row[["minimum"]]))
-    minimum = list(
-                  na2empty(row[["minimum"]]),
-                  "#exclusive" =  "false")
+    minimum = list(na2empty(row[["minimum"]]),
+                   "#exclusive" =  "false")
   else
     minimum <- NULL
 
   if (!is.na(row[["maximum"]]))
-    maximum = list(
-                  na2empty(row[["maximum"]]),
-                  "#exclusive" = "false")
+    maximum <- list(na2empty(row[["maximum"]]),
+                   "#exclusive" = "false")
   else
     maximum <- NULL
 
 
-   list(minimum = minimum,
-        maximum = maximum)
+  list(minimum = minimum, maximum = maximum)
 }
 
 
@@ -248,26 +239,27 @@ infer_domain_scale <-
             paste0(
               "For the attribute ",
               whichNot,
-              " the domain value inferred from col_classes does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
+              " the domain value inferred from col_classes
+              does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
             )
-          )
+            )
         }
-      } else{
-        if (any(domain != attributes$domain)) {
-          whichNot <-
-            attributes$attributeName[which(domain != attributes$domain)]
-          stop(
-            call. = FALSE,
-            paste0(
-              "For the attribute ",
-              whichNot,
-              " the domain value inferred from col_classes does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
+        } else{
+          if (any(domain != attributes$domain)) {
+            whichNot <-
+              attributes$attributeName[which(domain != attributes$domain)]
+            stop(
+              call. = FALSE,
+              paste0(
+                "For the attribute ",
+                whichNot,
+                " the domain value inferred from col_classes does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
+              )
             )
-          )
 
-        }
+          }
       }
-    }
+  }
 
     measurementScale[col_classes == "numeric"] <- "ratio" # !
     measurementScale[col_classes == "character"] <- "nominal"
@@ -299,13 +291,16 @@ infer_domain_scale <-
             paste0(
               "For the attribute ",
               whichNot,
-              " the measurementScale value inferred from col_classes does not agree with the measurementScale value existing in attributes. Check col_classes and the measurementScale column you provided.\n"
+              " the measurementScale value inferred from col_classes
+              does not agree with the measurementScale value existing
+              in attributes. Check col_classes and the measurementScale
+              column you provided.\n"
             )
-          )
+            )
 
         }
       }
-    }
+      }
 
 
     ## storage type is optional, maybe better not to set this?
@@ -325,25 +320,30 @@ infer_domain_scale <-
             paste0(
               "For the attribute ",
               whichNot,
-              " the storageType value inferred from col_classes does not agree with the storageType value existing in attributes. Check col_classes and the storageType column you provided.\n"
+              " the storageType value inferred from col_classes
+              does not agree with the storageType value existing in attributes.
+              Check col_classes and the storageType column you provided.\n"
             )
-          )
+            )
         }
-      } else{
-        if (any(storageType != attributes$storageType)) {
-          whichNot <-
-            attributes$attributeName[which(storageType != attributes$storageType)]
-          stop(
-            call. = FALSE,
-            paste0(
-              "For the attribute ",
-              whichNot,
-              " the storageType value inferred from col_classes does not agree with the storageType value existing in attributes. Check col_classes and the storageType column you provided.\n"
-            )
-          )
+        } else{
+          if (any(storageType != attributes$storageType)) {
+            whichNot <-
+              attributes$attributeName[which(storageType != attributes$storageType)]
+            stop(
+              call. = FALSE,
+              paste0(
+                "For the attribute ",
+                whichNot,
+                " the storageType value inferred from col_classes
+                does not agree with the storageType value existing
+                in attributes. Check col_classes and the storageType
+                column you provided.\n"
+              )
+              )
 
+          }
         }
-      }
     }
 
 
@@ -354,7 +354,7 @@ infer_domain_scale <-
       storageType = storageType,
       stringsAsFactors = FALSE
     )
-  }
+    }
 
 
 add_na_column <- function(column, df) {
@@ -411,7 +411,8 @@ check_and_complete_attributes <- function(attributes, col_classes) {
   if (!"measurementScale" %in% names(attributes)) {
     stop(
       call. = FALSE,
-      "attributes table must include an 'measurementScale' column, or you need to input 'col_classes'."
+      "attributes table must include an 'measurementScale'
+      column, or you need to input 'col_classes'."
     )
   } else{
     if (any(is.na(attributes$measurementScale))) {
@@ -424,17 +425,19 @@ check_and_complete_attributes <- function(attributes, col_classes) {
       ))) {
         stop(
           call. = FALSE,
-          "measurementScale permitted values are 'nominal', 'ordinal', 'ratio', 'interval', 'dateTime'."
+          "measurementScale permitted values are 'nominal',
+          'ordinal', 'ratio', 'interval', 'dateTime'."
         )
       }
+      }
     }
-  }
 
 
   if (!"domain" %in% names(attributes)) {
     stop(
       call. = FALSE,
-      "attributes table must include an 'domain' column, or you need to input 'col_classes'."
+      "attributes table must include an 'domain' column,
+      or you need to input 'col_classes'."
     )
   } else{
     if (any(is.na(attributes$domain))) {
@@ -455,64 +458,113 @@ check_and_complete_attributes <- function(attributes, col_classes) {
           'enumeratedDomain', 'dateTimeDomain'."
         )
       }
+      }
     }
-  }
 
   # Check that measurementScale and domain values make valid combinations
   if ("measurementScale" %in% names(attributes) &&
       "domain" %in% names(attributes)) {
     for (i in seq_len(nrow(attributes))) {
-      mscale <- attributes[i,"measurementScale"]
-      domain <- attributes[i,"domain"]
+      mscale <- attributes[i, "measurementScale"]
+      domain <- attributes[i, "domain"]
 
-      if (mscale %in% c("nominal", "ordinal") && !(domain %in% c("enumeratedDomain", "textDomain"))) {
-        stop(call. = FALSE,
-             paste0("The attribute in row ", i, " has an invalid combination of measurementScale (", mscale, ") and domain (", domain,"). For a measurementScale of '", mscale, "', domain must be either 'enumeratedDomain' or 'textDomain'."))
-      } else if (mscale %in% c("interval", "ratio") && domain != "numericDomain") {
-        stop(call. = FALSE,
-             paste0("The attribute in row ", i, " has an invalid combination of measurementScale (", mscale, ") and domain (", domain,"). For a measurementScale of '", mscale, "', domain must be 'numericDomain'."))
-      } else if (mscale == "dateTime" && !is.null(domain) && domain != "dateTimeDomain") {
-        stop(call. = FALSE,
-             paste0("The attribute in row ", i, " has an invalid combination of measurementScale (", mscale, ") and domain (", domain,"). For a measurementScale of '", mscale, "', domain must be 'dateTimeDomain'."))
+      if (mscale %in% c("nominal", "ordinal") &&
+          !(domain %in% c("enumeratedDomain", "textDomain"))) {
+        stop(
+          call. = FALSE,
+          paste0(
+            "The attribute in row ",
+            i,
+            " has an invalid combination of measurementScale (",
+            mscale,
+            ") and domain (",
+            domain,
+            "). For a measurementScale of '",
+            mscale,
+            "', domain must be either 'enumeratedDomain' or 'textDomain'."
+          )
+        )
+      } else if (mscale %in% c("interval", "ratio") &&
+                 domain != "numericDomain") {
+        stop(
+          call. = FALSE,
+          paste0(
+            "The attribute in row ",
+            i,
+            " has an invalid combination of measurementScale (",
+            mscale,
+            ") and domain (",
+            domain,
+            "). For a measurementScale of '",
+            mscale,
+            "', domain must be 'numericDomain'."
+          )
+        )
+      } else if (mscale == "dateTime" &&
+                 !is.null(domain) && domain != "dateTimeDomain") {
+        stop(
+          call. = FALSE,
+          paste0(
+            "The attribute in row ",
+            i,
+            " has an invalid combination of measurementScale (",
+            mscale,
+            ") and domain (",
+            domain,
+            "). For a measurementScale of '",
+            mscale,
+            "', domain must be 'dateTimeDomain'."
+          )
+        )
       }
     }
   }
 
   return(attributes)
-}
+  }
 
 # number of codes by attributeName in factors
-count_levels <- function(attributeName, factors){
-  factors <- factors[factors$attributeName == attributeName,]
+count_levels <- function(attributeName, factors) {
+  factors <- factors[factors$attributeName == attributeName, ]
   length(unique(factors$code))
 }
 
 # number of lines by attributeName in factors
-count_lines <- function(attributeName, factors){
-  factors <- factors[factors$attributeName == attributeName,]
+count_lines <- function(attributeName, factors) {
+  factors <- factors[factors$attributeName == attributeName, ]
   nrow(factors)
 }
 
 # check the names of factors
 # check that for each attributeName codes are unique
-check_factors <- function(factors){
-
-  if(!all(c("attributeName", "code", "definition") %in% names(factors))){
-    stop("The factors data.frame should have variables called attributeName, code and definition.",
-         call. = FALSE)
+check_factors <- function(factors) {
+  if (!all(c("attributeName", "code", "definition") %in% names(factors))) {
+    stop(
+      "The factors data.frame should have
+      variables called attributeName, code and definition.",
+      call. = FALSE
+    )
   }
 
-  lines_no <- vapply(unique(factors$attributeName), count_lines, factors = factors, 1)
-  levels_no <- vapply(unique(factors$attributeName), count_levels, factors = factors, 1)
+  lines_no <- vapply(unique(factors$attributeName),
+                     count_lines, factors = factors, 1)
+  levels_no <- vapply(unique(factors$attributeName),
+                      count_levels, factors = factors, 1)
 
-  forcheck <- data.frame(lines_no = lines_no,
-                         levels_no = levels_no,
-                         attributeName = unique(factors$attributeName))
-  notequal <- forcheck[forcheck$lines_no != forcheck$levels_no, ]
-  if(nrow(notequal) != 0){
-    stop(paste("There are attributeName(s) in factors with duplicate codes:",
-               notequal$attributeName),
-         call. = FALSE)
+  forcheck <- data.frame(
+    lines_no = lines_no,
+    levels_no = levels_no,
+    attributeName = unique(factors$attributeName)
+  )
+  notequal <- forcheck[forcheck$lines_no != forcheck$levels_no,]
+  if (nrow(notequal) != 0) {
+    stop(
+      paste(
+        "There are attributeName(s) in factors with duplicate codes:",
+        notequal$attributeName
+      ),
+      call. = FALSE
+    )
   }
 }
 
@@ -528,7 +580,8 @@ check_factors <- function(factors){
 #' is_standardUnit("amperePerMeter") # TRUE
 #' is_standardUnit("speciesPerSquareMeter") # FALSE
 is_standardUnit <- function(x) {
-  #standard_unit_list <- read.csv(system.file("units/standard_unit_list.csv", package = "EML"))
+  ##standard_unit_list <- read.csv(
+  ##  system.file("units/standard_unit_list.csv", package = "EML"))
   standard_unit_list <- standardUnits$units$id
   (x %in% standard_unit_list)
 }
