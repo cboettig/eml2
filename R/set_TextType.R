@@ -5,6 +5,7 @@
 #' @param file path to a file providing formatted input text, see details.
 #' @return a TextType object that can be coerced into any element inheriting from TextType, see examples
 #' @importFrom tools file_ext
+#' @importFrom methods as
 #' @details If the `rmarkdown` package is installed, then the input file can
 #' be a Microsoft Word (.docx) file, a markdown file, or other file
 #' recognized by Pandoc (see http://pandoc.org), which will automate the conversion
