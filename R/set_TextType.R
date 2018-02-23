@@ -50,11 +50,11 @@ set_TextType <- function(file = NULL, text = NULL) {
 }
 
 
-
+#' @importFrom xml2 xml_find_all xml_children xml_contents read_xml
 set_section <- function(docbook) {
   lapply(xml2::xml_find_all(docbook, "/article/sect1"),
          function(x)
-           paste(lapply(xml_children(x), as.character),
+           paste(lapply(xml2::xml_children(x), as.character),
                  collapse = "\n")
   )
 }

@@ -21,11 +21,9 @@ userId
 
 ## It would be so nice if jqr returned "json" class objects!
 y <- structure(as.character(jqr::combine(x)), class="json")
+emld::as_emld(y)
 
-
-z <- fromJSON(y, simplifyVector = FALSE)
-#class(z)<- c("emld", "list")
 
 ## whish we could drop the nulls
 #jqr::jq('{"foo": 19}', '.foo // 42')
-fromJSON(json, simplifyVector = FALSE)
+

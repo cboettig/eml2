@@ -1,11 +1,14 @@
 Package: eml2
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Create and Manipulate Data using the Ecological Metadata Language
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: person("Carl", "Boettiger", 
+                  email = "cboettig@gmail.com", 
+                  role = c("aut", "cre", "cph"),
+                  comment=c(ORCID = "http://orcid.org/0000-0002-1642-628X"))
+Description: A successor to the 'EML' R package which provides the same high level
+             functions for creating and extracting data from 'EML' files, while
+             providing a simpler and more user friendly lower level interface.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -18,7 +21,7 @@ Suggests: knitr,
     testthat,
     covr,
     EML
-Imports: xml2, methods, digest, emld, jqr, jsonlite
+Imports: xml2, methods, digest, emld, jqr, jsonlite, uuid
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Remotes: cboettig/emld

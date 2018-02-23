@@ -11,11 +11,33 @@ The goal of `eml2` is to provide both a drop-in replacement for the higher-level
 Creating EML
 ============
 
-Here we show a the creation of a relatively complete EML document using `eml2`. This closely parallels the function calls shown in the original EML [R-package vignette](https://ropensci.github.io/EML/articles/creating-EML.html).
-
 ``` r
 library(eml2)
 ```
+
+A minimal valid EML document:
+-----------------------------
+
+``` r
+me <- list(individualName = list(givenName = "Carl", surName = "Boettiger"))
+eml <- list(dataset = list(
+              title = "A Mimimal Valid EML Dataset",
+              creator = me,
+              contact = me)
+            )
+
+
+write_eml(eml, "ex.xml")
+eml_validate("ex.xml")
+#> [1] TRUE
+#> attr(,"errors")
+#> character(0)
+```
+
+A Richer Example
+----------------
+
+Here we show a the creation of a relatively complete EML document using `eml2`. This closely parallels the function calls shown in the original EML [R-package vignette](https://ropensci.github.io/EML/articles/creating-EML.html).
 
 `set_*` methods
 ---------------
@@ -109,7 +131,7 @@ Of course, this assumes that we have some knowledge of what the possible terms p
 Constructor methods
 -------------------
 
-For instance, the function `construct$creator()` has function arguments corresponding to each possible slot for a creator. This means we can rely on `tab completion` (and/or autocomplete previews in RStudio) to see what the possible options are. `construct$` functions exist for all complex types. If `construct$` does not exist for an argument (e.g. there is no `construct$givenName`), then the field takes a simple string argument.
+For instance, the function `construct$creator()` has function arguments corresponding to each possible slot for a creator. This means we can rely on *tab completion* (and/or autocomplete previews in RStudio) to see what the possible options are. `construct$` functions exist for all complex types. If `construct$` does not exist for an argument (e.g. there is no `construct$givenName`), then the field takes a simple string argument.
 
 ### Creating parties (creator, contact, publisher)
 
