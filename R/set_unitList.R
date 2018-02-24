@@ -130,7 +130,7 @@ set_unitList <-
     out$unit <- ListOfunit
 
     if (as_metadata) {
-      as(out, "additionalMetadata")
+      list(metadata = list(unitList = out))
     } else{
       out
     }
