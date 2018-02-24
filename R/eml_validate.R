@@ -25,8 +25,10 @@
 #' @importFrom methods is
 eml_validate <- function(eml, encoding = "UTF-8", schema = NULL){
 
-  if(is.character(eml) & file.exists(eml)){
-    doc <- xml2::read_xml(eml, encoding = encoding)
+  if(is.character(eml)){
+    if(file.exists(eml)){
+      doc <- xml2::read_xml(eml, encoding = encoding)
+    }
   } else if(is(eml, "xml_document")){
     doc <- eml
   }

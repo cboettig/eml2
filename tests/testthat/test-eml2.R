@@ -70,7 +70,7 @@ attributeList <-
                                  "numeric"))
 
 ## ------------------------------------------------------------------------
-physical <- set_physical("hf205-01-TPexp1.csv")
+expect_message(physical <- set_physical("hf205-01-TPexp1.csv"), "calculated file size")
 
 ## ------------------------------------------------------------------------
 dataTable <- list(
@@ -124,10 +124,7 @@ dataset <- list(
   dataTable = dataTable)
 
 ## ------------------------------------------------------------------------
-eml <- list(
-  packageId = uuid::UUIDgenerate(),
-  system = "uuid",
-  dataset = dataset)
+eml <- list(dataset = dataset)
 
 
 ## ------------------------------------------------------------------------

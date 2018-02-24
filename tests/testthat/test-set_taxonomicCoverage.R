@@ -35,6 +35,17 @@ test_that("set_taxonomicCoverage works with nested lists", {
 
 })
 
+test_that("set_taxonomicCoverage works with
+           ITIS using taxize", {
+
+             taxon_coverage <- set_taxonomicCoverage(
+               c("Macrocystis pyrifera"),
+               expand = TRUE)
+
+             expect_is(taxon_coverage, "list")
+
+           })
+
 
 test_that("set_taxonomicCoverage works with
            ITIS using taxize", {
