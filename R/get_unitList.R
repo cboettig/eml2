@@ -41,6 +41,7 @@ get_unit <- function(unit){
   fromJSON(toJSON(unit))
 }
 
+#' @importFrom jsonlite toJSON fromJSON
 get_unitType <- function(unitType) {
   ## Nested data structure, rectangle via jq
     y <- toJSON(unitType)
