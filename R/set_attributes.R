@@ -174,13 +174,13 @@ set_enumeratedDomain <- function(row, factors) {
 set_BoundsGroup <- function(row) {
   if (!is.na(row[["minimum"]]))
     minimum = list(na2empty(row[["minimum"]]),
-                   "#exclusive" =  "false")
+                   "exclusive" =  "false")
   else
     minimum <- NULL
 
   if (!is.na(row[["maximum"]]))
     maximum <- list(na2empty(row[["maximum"]]),
-                   "#exclusive" = "false")
+                   "exclusive" = "false")
   else
     maximum <- NULL
 
