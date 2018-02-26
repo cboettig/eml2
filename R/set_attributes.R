@@ -76,7 +76,7 @@ set_attributes <-
     out <- list()
     out$attribute <-
       lapply(1:dim(attributes)[1], function(i)
-        set_attribute(attributes[i, ], factors = factors))
+        set_attribute(attributes[i,], factors = factors))
 
     as_emld(out)
   }
@@ -161,7 +161,7 @@ set_attribute <- function(row, factors = NULL) {
 
 set_enumeratedDomain <- function(row, factors) {
   name <- row[["attributeName"]]
-  df <- factors[factors$attributeName == name,]
+  df <- factors[factors$attributeName == name, ]
 
   ListOfcodeDefinition <- lapply(1:dim(df)[1], function(i) {
     list(code = df[i, "code"],
@@ -180,7 +180,7 @@ set_BoundsGroup <- function(row) {
 
   if (!is.na(row[["maximum"]]))
     maximum <- list(na2empty(row[["maximum"]]),
-                   "exclusive" = "false")
+                    "exclusive" = "false")
   else
     maximum <- NULL
 
@@ -525,13 +525,13 @@ check_and_complete_attributes <- function(attributes, col_classes) {
 
 # number of codes by attributeName in factors
 count_levels <- function(attributeName, factors) {
-  factors <- factors[factors$attributeName == attributeName, ]
+  factors <- factors[factors$attributeName == attributeName,]
   length(unique(factors$code))
 }
 
 # number of lines by attributeName in factors
 count_lines <- function(attributeName, factors) {
-  factors <- factors[factors$attributeName == attributeName, ]
+  factors <- factors[factors$attributeName == attributeName,]
   nrow(factors)
 }
 
@@ -556,7 +556,7 @@ check_factors <- function(factors) {
     levels_no = levels_no,
     attributeName = unique(factors$attributeName)
   )
-  notequal <- forcheck[forcheck$lines_no != forcheck$levels_no,]
+  notequal <- forcheck[forcheck$lines_no != forcheck$levels_no, ]
   if (nrow(notequal) != 0) {
     stop(
       paste(

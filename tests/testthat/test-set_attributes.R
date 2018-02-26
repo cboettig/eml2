@@ -22,7 +22,8 @@ testthat::test_that("we can have numeric data with bounds where some bounds are 
                         physical = set_physical("file.csv")
                       )
 
-                      me <- list(individualName = list(givenName = "Carl", surName = "Boettiger"))
+                      me <-
+                        list(individualName = list(givenName = "Carl", surName = "Boettiger"))
 
                       dataset <-
                         list(
@@ -32,10 +33,9 @@ testthat::test_that("we can have numeric data with bounds where some bounds are 
                           dataTable = dataTable
                         )
                       eml <-
-                        list(
-                            packageId = "123",
-                            system = "uuid",
-                            dataset = dataset)
+                        list(packageId = "123",
+                             system = "uuid",
+                             dataset = dataset)
 
                       write_eml(eml, "eml.xml")
                       testthat::expect_true(eml_validate("eml.xml"))
@@ -493,110 +493,107 @@ testthat::test_that("The set_attributes function returns useful warnings", {
 })
 
 
-testthat::test_that("The set_attributes function stops if missing required fields in factors",{
-  # attributesList
-  attributes <-
-    data.frame(
-      attributeName = c(
-        "animal",
-        "age",
-        "size"),
-      attributeDefinition = c(
-        "animal species",
-        "life stage",
-        "body length"),
-      formatString = c(
-        NA,
-        NA,
-        NA),
-      definition = c(
-        "animal species",
-        "life stage",
-        "body length"),
-      unit = c(
-        NA,
-        NA,
-        "meter"),
-      numberType = c(
-        NA,
-        NA,
-        "real"),
-      stringsAsFactors = FALSE
-    )
+testthat::test_that("The set_attributes function stops if missing required fields in factors",
+                    {
+                      # attributesList
+                      attributes <-
+                        data.frame(
+                          attributeName = c("animal",
+                                            "age",
+                                            "size"),
+                          attributeDefinition = c("animal species",
+                                                  "life stage",
+                                                  "body length"),
+                          formatString = c(NA,
+                                           NA,
+                                           NA),
+                          definition = c("animal species",
+                                         "life stage",
+                                         "body length"),
+                          unit = c(NA,
+                                   NA,
+                                   "meter"),
+                          numberType = c(NA,
+                                         NA,
+                                         "real"),
+                          stringsAsFactors = FALSE
+                        )
 
-  # two of the attributes are factors
-  animal.codes <- c(A = "monstercat",
-                    B = "monsterdog")
-  age.codes <- c(A = "juvenile",
-                 B = "adult")
-  factors <- rbind(
-    data.frame(
-      code = names(animal.codes),
-      definition = unname(animal.codes)
-    ),
-    data.frame(
-      code = names(age.codes),
-      definition = unname(age.codes)
-    ))
+                      # two of the attributes are factors
+                      animal.codes <- c(A = "monstercat",
+                                        B = "monsterdog")
+                      age.codes <- c(A = "juvenile",
+                                     B = "adult")
+                      factors <- rbind(
+                        data.frame(
+                          code = names(animal.codes),
+                          definition = unname(animal.codes)
+                        ),
+                        data.frame(
+                          code = names(age.codes),
+                          definition = unname(age.codes)
+                        )
+                      )
 
-  testthat::expect_error(set_attributes(attributes,
-                                        factors,
-                                        col_classes = c("factor", "factor", "numeric")),
-                         "The factors data.frame should have")
+                      testthat::expect_error(
+                        set_attributes(
+                          attributes,
+                          factors,
+                          col_classes = c("factor", "factor", "numeric")
+                        ),
+                        "The factors data.frame should have"
+                      )
 
-})
+                    })
 
-testthat::test_that("The set_attributes function stops if duplicate codes in factors",{
-  # attributesList
-  attributes <-
-    data.frame(
-      attributeName = c(
-        "animal",
-        "age",
-        "size"),
-      attributeDefinition = c(
-        "animal species",
-        "life stage",
-        "body length"),
-      formatString = c(
-        NA,
-        NA,
-        NA),
-      definition = c(
-        "animal species",
-        "life stage",
-        "body length"),
-      unit = c(
-        NA,
-        NA,
-        "meter"),
-      numberType = c(
-        NA,
-        NA,
-        "real"),
-      stringsAsFactors = FALSE
-    )
+testthat::test_that("The set_attributes function stops if duplicate codes in factors",
+                    {
+                      # attributesList
+                      attributes <-
+                        data.frame(
+                          attributeName = c("animal",
+                                            "age",
+                                            "size"),
+                          attributeDefinition = c("animal species",
+                                                  "life stage",
+                                                  "body length"),
+                          formatString = c(NA,
+                                           NA,
+                                           NA),
+                          definition = c("animal species",
+                                         "life stage",
+                                         "body length"),
+                          unit = c(NA,
+                                   NA,
+                                   "meter"),
+                          numberType = c(NA,
+                                         NA,
+                                         "real"),
+                          stringsAsFactors = FALSE
+                        )
 
-  # two of the attributes are factors
-  animal.codes <- c(A = "monstercat",
-                    B = "monsterdog")
-  age.codes <- c(A = "juvenile",
-                 B = "adult")
-  factors <- rbind(
-    data.frame(
-      attributeName = "animal",
-      code = names(animal.codes),
-      definition = unname(animal.codes)
-    ),
-    data.frame(
-      attributeName = "age",
-      code = c("A", "A"),
-      definition = unname(age.codes)
-    ))
+                      # two of the attributes are factors
+                      animal.codes <- c(A = "monstercat",
+                                        B = "monsterdog")
+                      age.codes <- c(A = "juvenile",
+                                     B = "adult")
+                      factors <- rbind(
+                        data.frame(
+                          attributeName = "animal",
+                          code = names(animal.codes),
+                          definition = unname(animal.codes)
+                        ),
+                        data.frame(
+                          attributeName = "age",
+                          code = c("A", "A"),
+                          definition = unname(age.codes)
+                        )
+                      )
 
-  testthat::expect_error(set_attributes(attributes,
-                                        factors,
-                                        col_classes = c("factor", "factor", "numeric")),
-                         regex = "There are attributeName")
-})
-
+                      testthat::expect_error(set_attributes(
+                        attributes,
+                        factors,
+                        col_classes = c("factor", "factor", "numeric")
+                      ),
+                      regex = "There are attributeName")
+                    })

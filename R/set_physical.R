@@ -68,7 +68,10 @@ set_physical <- function(objectName,
   if (file.exists(objectName)) {
     if (length(size) == 0) {
       message(paste0(
-        "Automatically calculated file size using file.size(\"", objectName, "\")"))
+        "Automatically calculated file size using file.size(\"",
+        objectName,
+        "\")"
+      ))
       size <- as.character(file.size(objectName))
     }
     size <- list(size = size, unit = sizeUnit)

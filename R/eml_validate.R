@@ -1,4 +1,5 @@
 
+
 #' eml_validate
 #'
 #' eml_validate processes an EML document using the XSD schema for the
@@ -23,29 +24,33 @@
 #' @export
 #' @importFrom xml2 read_xml xml_validate
 #' @importFrom methods is
-eml_validate <- function(eml, encoding = "UTF-8", schema = NULL){
-
-  if(is.character(eml)){
-    if(file.exists(eml)){
+eml_validate <- function(eml,
+                         encoding = "UTF-8",
+                         schema = NULL) {
+  if (is.character(eml)) {
+    if (file.exists(eml)) {
       doc <- xml2::read_xml(eml, encoding = encoding)
     }
-  } else if(is(eml, "xml_document")){
+  } else if (is(eml, "xml_document")) {
     doc <- eml
   }
 
   # Use the EML namespace to find the EML version and the schema location
-  if(is.null(schema)){
+  if (is.null(schema)) {
     try(schema <- eml_locate_schema(doc))
   }
   schema_doc <- xml2::read_xml(schema)
-  result <- tryCatch(xml2::xml_validate(doc, schema_doc),
+  result <- tryCatch(
+    xml2::xml_validate(doc, schema_doc),
     error = function(e) {
       warning("The document could not be validated.")
-      list(status=1, errors=c(NULL), warnings=c(e))
+      list(status = 1,
+           errors = c(NULL),
+           warnings = c(e))
     }
   )
 
-result
+  result
 }
 
 #' eml_locate_schema
@@ -76,24 +81,27 @@ eml_locate_schema <- function(eml, ns = NA) {
                              "\\s+")[[1]]
   schema_file <- basename(schemaLocation[2])
 
-    if(!is(eml,'xml_document')) {
-        stop("Argument is not an instance of an
-             XML document (xml2::xml_document)")
-    }
-    namespace <- xml2::xml_ns(eml)
-    stopifnot(is(namespace, 'xml_namespace'))
+  if (!is(eml, 'xml_document')) {
+    stop("Argument is not an instance of an
+         XML document (xml2::xml_document)")
+  }
+  namespace <- xml2::xml_ns(eml)
+  stopifnot(is(namespace, 'xml_namespace'))
 
-    ##
-    if(is.na(ns)){
-      i <- grep(schemaLocation[1], namespace)
-      if(length(i) == 0) i <- 1
-      ns <- namespace[i]
-    }
+  ##
+  if (is.na(ns)) {
+    i <- grep(schemaLocation[1], namespace)
+    if (length(i) == 0)
+      i <- 1
+    ns <- namespace[i]
+  }
 
-    eml_version <- strsplit(ns, "-")[[1]][2]
-    schema <- system.file(paste0("xsd/eml-", eml_version, "/", schema_file), package='eml2')
-    if(schema == '') {
-        stop(paste("No schema found for namespace: ", ns))
-    }
-    return(schema)
-}
+  eml_version <- strsplit(ns, "-")[[1]][2]
+  schema <-
+    system.file(paste0("xsd/eml-", eml_version, "/", schema_file),
+                package = 'eml2')
+  if (schema == '') {
+    stop(paste("No schema found for namespace: ", ns))
+  }
+  return(schema)
+  }

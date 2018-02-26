@@ -18,7 +18,9 @@ test_that("we can validate an xml_document", {
 
 test_that("set_physical can compute file size automatically", {
   skip_if_not(file.exists("hf205-01-TPexp1.csv"))
-  expect_message(physical <- set_physical("hf205-01-TPexp1.csv"), "calculated file size")
+  expect_message(physical <-
+                   set_physical("hf205-01-TPexp1.csv"),
+                "calculated file size")
 
 })
 

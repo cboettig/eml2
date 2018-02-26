@@ -17,4 +17,22 @@ test_that("We can get attributes out as a data.frame", {
   A <- eml_get(eml, "attributeList")
 
 
+
+
+
+
+
+  df <- data.frame(
+    attributeName = "svl",
+    attributeDefinition = "Snout-vent length",
+    unit = "meter",
+    numberType = "real",
+    minimum = "0",
+    maximum = NA,
+    stringsAsFactors = FALSE
+  )
+  attributeList <-
+    set_attributes(df, col_classes = "numeric")
+
+
 })
