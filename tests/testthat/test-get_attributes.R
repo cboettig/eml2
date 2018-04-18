@@ -11,8 +11,16 @@ test_that("We can get attributes out as a data.frame", {
     ))
   A <- eml_get(eml, "attributeList")
   #df <- get_attributes(A)
+  df <- fromJSON(toJSON(A), flatten = TRUE)
+  attributes <- df$attribute
 
-  eml <-
+  ## merge bounds, merge precision columns!!
+  #attributes <- attributes[!grepl("bounds", names(attributes))]
+  attributes <- attributes[!grepl("\\.id$", names(attributes))]
+  names(attributes) <- gsub(".*\\.*\\b(\\w+)\\b$", "\\1", names(attributes))
+  attributes
+
+
     read_eml(system.file("xsd/test/eml-i18n.xml", package = "EML"))
   A <- eml_get(eml, "attributeList")
 
