@@ -5,9 +5,8 @@
 #' eml_validate processes an EML document using the XSD schema for the
 #' appropriate version of EML and determines if the document is schema-valid
 #' as defined by the XSD specification
-#' @param eml file path or xml document
-#' @param encoding optional, if eml is a file path / an eml and has special characters, one can
-#' gives the encoding used by xmlParse.
+#' @param eml file path, xml_document,
+#' @param encoding optional encoding for files, default UTF-8.
 #' @param ... additional arguments to eml_write, such as namespaces
 #' @param schema path to schema
 #' @return Whether the document is valid (logical)
@@ -16,14 +15,19 @@
 #'
 #'  f <- system.file("extdata", "example.xml", package = "emld")
 #'
-#'  ## validate given a file name, without needing to parse first
+#'  ## validate file directly from disk:
 #'  eml_validate(f)
+#'
+#'  ## validate an eml object:
+#'  eml <- read_eml(f)
+#'  eml_validate(eml)
 #'
 #' }
 #'
 #' @export
 #' @importFrom xml2 read_xml xml_validate
 #' @importFrom methods is
+#' @importFrom emld as_xml
 eml_validate <- function(eml,
                          encoding = "UTF-8",
                          schema = NULL) {
@@ -33,6 +37,15 @@ eml_validate <- function(eml,
     }
   } else if (is(eml, "xml_document")) {
     doc <- eml
+  } else if (is(eml, "list")){
+    ##  FIXME shouldn't have to write to tempfile,
+    ## but  `doc <- emld::as_xml(eml)` fails to drop xsi prefix on "schemaLocation"
+    f <- tempfile()
+    x <- emld::as_xml(eml, f)
+    doc <- xml2::read_xml(f)
+    unlink(f)
+  } else {
+    stop(paste("Did not recognize eml object with class", class(eml)))
   }
 
   # Use the EML namespace to find the EML version and the schema location
@@ -73,13 +86,10 @@ eml_validate <- function(eml,
 #' eml <- xml2::read_xml(f)
 #' schema <- eml_locate_schema(eml)
 #' }
-#' @importFrom xml2 xml_ns xml_attr
+#' @importFrom xml2 xml_ns xml_attr xml_root
 #' @export
 eml_locate_schema <- function(eml, ns = NA) {
-  schemaLocation <- strsplit(xml2::xml_attr(eml,
-                                            "schemaLocation"),
-                             "\\s+")[[1]]
-  schema_file <- basename(schemaLocation[2])
+
 
   if (!is(eml, 'xml_document')) {
     stop("Argument is not an instance of an
@@ -87,6 +97,12 @@ eml_locate_schema <- function(eml, ns = NA) {
   }
   namespace <- xml2::xml_ns(eml)
   stopifnot(is(namespace, 'xml_namespace'))
+
+  schemaLocation <- strsplit(
+    xml2::xml_attr(xml2::xml_root(eml),
+                   "schemaLocation"),
+                             "\\s+")[[1]]
+  schema_file <- basename(schemaLocation[2])
 
   ##
   if (is.na(ns)) {
