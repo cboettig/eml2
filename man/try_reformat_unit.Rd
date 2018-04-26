@@ -24,8 +24,10 @@ Will attempt to reformat unit utilizing units::deparse_unit(units::as.units(unit
 Used to decifier units entered symbolically. Will return the long form of the unit.
 }
 \examples{
+\dontrun{
 unit <- "kg^2*s/(km^3*mole)"
 exponents <- c("square", "cubic")
 exponents_numeric <- c("2", "3")
 try_reformat_unit(unit, exponents, exponents_numeric)
+}
 }

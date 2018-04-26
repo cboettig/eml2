@@ -14,7 +14,6 @@
 #' return_eml_units('km s-2')
 #' return_eml_units('s-2 /     kilometers-1') # this works but is not advised
 #' }
-#'
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 return_eml_units <- function(input_units, quiet = FALSE) {
@@ -258,10 +257,12 @@ load_all_units <- function() {
 #' @param all_units (data.frame)
 #' @return (character) unit. Fails if cannot reformat
 #' @examples
+#' \dontrun{
 #' unit <- "kg^2*s/(km^3*mole)"
 #' exponents <- c("square", "cubic")
 #' exponents_numeric <- c("2", "3")
 #' try_reformat_unit(unit, exponents, exponents_numeric)
+#' }
 #' @importFrom stringi stri_reverse
 #' @importFrom units deparse_unit as.units
 try_reformat_unit <- function(unit, exponents, exponents_numeric, all_units = load_all_units()) {
