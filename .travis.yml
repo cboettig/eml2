@@ -18,5 +18,6 @@ addons:
       - librdf0-dev
       - libv8-dev
       - libjq-dev
+      - libudunits2-dev
 after_success:
   - Rscript -e 'covr::codecov()'
