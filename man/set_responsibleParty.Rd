@@ -18,7 +18,7 @@ set_responsibleParty(givenName = NULL, surName = NULL,
 
 \item{positionName}{individual's position, i.e. "Researcher", "Graduate Student", "Professor"}
 
-\item{address}{address object, see `construct$address` to build an address object}
+\item{address}{address object, see `eml$address` to build an address object}
 
 \item{phone}{individual or organization phone number}
 

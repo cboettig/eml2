@@ -15,10 +15,10 @@ template_constructor <- function(object){
 #names(who) <- who
 #construct <- lapply(who, template_constructor)
 
-#' construct
+#' eml
 #'
 #' @docType data
 #' @keywords datasets
-#' @name construct
+#' @name eml
 #' @format A list with constructor functions
 NULL

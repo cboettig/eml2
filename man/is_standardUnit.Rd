@@ -10,7 +10,8 @@ is_standardUnit(x)
 \item{x}{name of unit to check}
 }
 \value{
-TRUE if unit is exact match to the id of a unit in the Standard Units Table, FALSE otherwise.
+TRUE if unit is exact match to the id of
+ a unit in the Standard Units Table, FALSE otherwise.
 }
 \description{
 is_standardUnit

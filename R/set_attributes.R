@@ -43,7 +43,8 @@ set_attributes <-
     ## all as characters please (no stringsAsFactors!)
     attributes[] <- lapply(attributes, as.character)
     factors[]  <- lapply(factors, as.character)
-    ##  check attributes data.frame.  must declare required columns: attributeName, (attributeDescription, ....)
+    ##  check attributes data.frame.
+    ## must declare required columns: attributeName, attributeDescription
     ## infer "domain" & "measurementScale" given optional column classes
 
     attributes <-
@@ -54,7 +55,9 @@ set_attributes <-
       check_factors(factors)
     }
 
-    ## Add NA columns if necessary FIXME some of these can be missing if their class isn't represented, but otherwise must be present
+    ## Add NA columns if necessary FIXME some of these can
+    ## be missing if their class isn't represented, but otherwise
+    ## must be present
     for (x in c(
       "precision",
       "minimum",
@@ -146,8 +149,9 @@ set_attribute <- function(row, factors = NULL) {
   measurementScale[[s]] <- node
   missingValueCode <- NULL
   if (!is.na(row[["missingValueCode"]])) {
-    missingValueCode <- list(code = na2empty(row[["missingValueCode"]]),
-                             codeExplanation = na2empty(row[["missingValueCodeExplanation"]]))
+    missingValueCode <-
+      list(code = na2empty(row[["missingValueCode"]]),
+           codeExplanation = na2empty(row[["missingValueCodeExplanation"]]))
   }
   list(
     attributeName = row[["attributeName"]],
@@ -173,7 +177,7 @@ set_enumeratedDomain <- function(row, factors) {
 
 set_BoundsGroup <- function(row) {
   if (!is.na(row[["minimum"]]))
-    minimum = list(na2empty(row[["minimum"]]),
+    minimum <- list(na2empty(row[["minimum"]]),
                    "exclusive" =  "false")
   else
     minimum <- NULL
@@ -198,7 +202,8 @@ infer_domain_scale <-
       if (is.null(names(col_classes))) {
         stop(
           call. = FALSE,
-          "If col_classes is not NULL, it must have as many elements as there are rows in attributes unless they are named."
+"If col_classes is not NULL, it must have
+ as many elements as there are rows in attributes unless they are named."
         )
 
       }
@@ -207,17 +212,20 @@ infer_domain_scale <-
       if (!(all(names(col_classes) %in% attributeName))) {
         stop(
           call. = FALSE,
-          "If col_classes is a named list, it should have names corresponding to attributeName."
+"If col_classes is a named list, it should have names
+ corresponding to attributeName."
         )
       }
     }
 
     if (!(all(
-      col_classes[!is.na(col_classes)] %in% c("numeric", "character", "factor", "Date", "ordered")
+      col_classes[!is.na(col_classes)] %in%
+      c("numeric", "character", "factor", "Date", "ordered")
     ))) {
       stop(
         call. = FALSE,
-        "All non missing col_classes values have to be 'ordered', 'numeric', 'character', 'factor' or 'Date'."
+        "All non missing col_classes values have to
+        be 'ordered', 'numeric', 'character', 'factor' or 'Date'."
       )
     }
     domain <- col_classes
@@ -231,16 +239,23 @@ infer_domain_scale <-
     # compare domain with domain given in attributes if there is one
     if ("domain" %in% names(attributes)) {
       if (!is.null(names(col_classes))) {
-        if (any(domain != attributes$domain[attributes$attributeName == names(col_classes)])) {
+        if (any(domain !=
+                attributes$domain[
+                  attributes$attributeName == names(col_classes)])) {
           whichNot <-
-            names(col_classes)[which(domain != attributes$domain[attributes$attributeName == names(col_classes)])]
+            names(col_classes)[which(domain !=
+                                       attributes$domain[
+                                         attributes$attributeName ==
+                                           names(col_classes)])]
           stop(
             call. = FALSE,
             paste0(
               "For the attribute ",
               whichNot,
               " the domain value inferred from col_classes
-              does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
+              does not agree with the domain value existing
+              in attributes. Check col_classes and the domain
+              column you provided.\n"
             )
             )
         }
@@ -253,7 +268,10 @@ infer_domain_scale <-
               paste0(
                 "For the attribute ",
                 whichNot,
-                " the domain value inferred from col_classes does not agree with the domain value existing in attributes. Check col_classes and the domain column you provided.\n"
+                " the domain value inferred from col_classes
+                  does not agree with the domain value existing
+                in attributes. Check col_classes and the domain column
+                you provided.\n"
               )
             )
 
@@ -270,15 +288,26 @@ infer_domain_scale <-
     # compare measurementScale with measurementScale given in attributes if there is one
     if ("measurementScale" %in% names(attributes)) {
       if (!is.null(names(col_classes))) {
-        if (any(measurementScale != attributes$measurementScale[attributes$attributeName == names(col_classes)])) {
+        if (any(measurementScale !=
+                attributes$measurementScale[
+                  attributes$attributeName ==
+                  names(col_classes)])) {
           whichNot <-
-            names(col_classes)[which(measurementScale != attributes$measurementScale[attributes$attributeName == names(col_classes)])]
+            names(col_classes)[
+              which(measurementScale !=
+                      attributes$measurementScale[
+                        attributes$attributeName ==
+                          names(col_classes)])]
           stop(
             call. = FALSE,
             paste0(
               "For the attribute ",
               whichNot,
-              " the measurementScale value inferred from col_classes does not agree with the measurementScale value existing in attributes. Check col_classes and the measurementScale column you provided.\n"
+              " the measurementScale value
+              inferred from col_classes does not
+              agree with the measurementScale value
+              existing in attributes. Check col_classes
+              and the measurementScale column you provided.\n"
             )
           )
         }
@@ -312,9 +341,12 @@ infer_domain_scale <-
     # compare storageType with storageType given in attributes if there is one
     if ("storageType" %in% names(attributes)) {
       if (!is.null(names(col_classes))) {
-        if (any(storageType != attributes$storageType[attributes$attributeName == names(col_classes)])) {
+        if (any(storageType != attributes$storageType[
+          attributes$attributeName == names(col_classes)])) {
           whichNot <-
-            names(col_classes)[which(storageType != attributes$storageType[attributes$attributeName == names(col_classes)])]
+            names(col_classes)[
+              which(storageType != attributes$storageType[
+                attributes$attributeName == names(col_classes)])]
           stop(
             call. = FALSE,
             paste0(
@@ -573,7 +605,8 @@ check_factors <- function(factors) {
 #'
 #' @param x name of unit to check
 #'
-#' @return TRUE if unit is exact match to the id of a unit in the Standard Units Table, FALSE otherwise.
+#' @return TRUE if unit is exact match to the id of
+#'  a unit in the Standard Units Table, FALSE otherwise.
 #' @export
 #'
 #' @examples

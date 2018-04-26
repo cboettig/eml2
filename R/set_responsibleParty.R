@@ -4,7 +4,7 @@
 #' @param surName individual name
 #' @param organizationName if party is an organization instead of an individual, name for the org
 #' @param positionName individual's position, i.e. "Researcher", "Graduate Student", "Professor"
-#' @param address address object, see `construct$address` to build an address object
+#' @param address address object, see `eml$address` to build an address object
 #' @param phone individual or organization phone number
 #' @param electronicMailAddress email address (alternatively, can use 'email' argument)
 #' @param onlineUrl a URL to the homepage of the individual or organization
