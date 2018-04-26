@@ -55,7 +55,12 @@ set_responsibleParty.character <-
       positionName = positionName,
       address = address,
       phone = phone,
-      electronicMailAddress = if(is.null(electronicMailAddress)) email else electronicMailAddress,
+      electronicMailAddress =
+        if(is.null(electronicMailAddress)){
+          email
+        } else {
+          electronicMailAddress
+        },
       onlineUrl = onlineUrl,
       userId = userId)
     )

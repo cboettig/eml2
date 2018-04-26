@@ -10,6 +10,8 @@ Description: A successor to the 'EML' R package which provides the same high lev
              functions for creating and extracting data from 'EML' files, while
              providing a simpler and more user friendly lower level interface.
 License: MIT + file LICENSE
+URL: https://github.com/cboettig/eml2
+BugReports: https://github.com/cboettig/eml2/issues
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 2.10)

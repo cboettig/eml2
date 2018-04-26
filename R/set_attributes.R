@@ -285,7 +285,8 @@ infer_domain_scale <-
     measurementScale[col_classes == "factor"] <- "nominal"
     measurementScale[col_classes %in% c("Date")] <- "dateTime"
 
-    # compare measurementScale with measurementScale given in attributes if there is one
+    # compare measurementScale with measurementScale
+    # given in attributes if there is one
     if ("measurementScale" %in% names(attributes)) {
       if (!is.null(names(col_classes))) {
         if (any(measurementScale !=
@@ -314,7 +315,8 @@ infer_domain_scale <-
       } else{
         if (any(measurementScale != attributes$measurementScale)) {
           whichNot <-
-            attributes$attributeName[which(measurementScale != attributes$measurementScale)]
+            attributes$attributeName[
+              which(measurementScale != attributes$measurementScale)]
           stop(
             call. = FALSE,
             paste0(
@@ -361,7 +363,8 @@ infer_domain_scale <-
         } else{
           if (any(storageType != attributes$storageType)) {
             whichNot <-
-              attributes$attributeName[which(storageType != attributes$storageType)]
+              attributes$attributeName[
+                which(storageType != attributes$storageType)]
             stop(
               call. = FALSE,
               paste0(

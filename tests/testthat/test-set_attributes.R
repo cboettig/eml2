@@ -1,7 +1,8 @@
 testthat::context("set_attributes")
 
 
-testthat::test_that("we can have numeric data with bounds where some bounds are missing",
+testthat::test_that("we can have numeric data with bounds
+                    where some bounds are missing",
                     {
                       df <- data.frame(
                         attributeName = "svl",
@@ -23,7 +24,9 @@ testthat::test_that("we can have numeric data with bounds where some bounds are 
                       )
 
                       me <-
-                        list(individualName = list(givenName = "Carl", surName = "Boettiger"))
+                        list(individualName =
+                               list(givenName = "Carl",
+                                    surName = "Boettiger"))
 
                       dataset <-
                         list(
@@ -42,7 +45,8 @@ testthat::test_that("we can have numeric data with bounds where some bounds are 
 
                     })
 
-testthat::test_that("The set_attributes function works for the vignette example", {
+testthat::test_that("The set_attributes function
+                    works for the vignette example", {
   attributes <-
     data.frame(
       attributeName = c(
@@ -110,7 +114,8 @@ testthat::test_that("The set_attributes function works for the vignette example"
     high     = "1.0 mg prey added ml-1 d-1",
     air.temp = "air temperature measured just above all plants (1 thermocouple)",
     water.temp = "water temperature measured within each pitcher",
-    par       = "photosynthetic active radiation (PAR) measured just above all plants (1 sensor)"
+    par       = "photosynthetic active radiation (PAR)
+    measured just above all plants (1 sensor)"
   )
 
   value.i <- c(
@@ -160,7 +165,8 @@ testthat::test_that("The set_attributes function works for the vignette example"
   testthat::expect_is(attributeList, "list")
 })
 
-testthat::test_that("The set_attributes function stops if missing required fields in attributes",
+testthat::test_that("The set_attributes function stops if
+                     missing required fields in attributes",
                     {
                       # attributeName
                       attributes <- data.frame(
@@ -265,7 +271,8 @@ testthat::test_that("The set_attributes function stops if missing required field
                     })
 
 testthat::test_that(
-  "The set_attributes function stops if non permitted values in col_classes or wrong length of col_classes",
+  "The set_attributes function stops if non permitted
+   values in col_classes or wrong length of col_classes",
   {
     attributes <-
       data.frame(
@@ -332,9 +339,11 @@ testthat::test_that(
       med.low  = "0,25 mg prey added ml-1 d-1",
       med.high = "0.5 mg prey added ml-1 d-1",
       high     = "1.0 mg prey added ml-1 d-1",
-      air.temp = "air temperature measured just above all plants (1 thermocouple)",
+      air.temp = "air temperature measured just above all
+      plants (1 thermocouple)",
       water.temp = "water temperature measured within each pitcher",
-      par       = "photosynthetic active radiation (PAR) measured just above all plants (1 sensor)"
+      par       = "photosynthetic active radiation (PAR)
+                   measured just above all plants (1 sensor)"
     )
 
     value.i <- c(
@@ -422,7 +431,9 @@ testthat::test_that(
         day = "Date"
       )
     ))
-    testthat::expect_error(set_attributes(attributes, col_classes = list("Date", "Date", "Date")))
+    testthat::expect_error(
+      set_attributes(attributes,
+                     col_classes = list("Date", "Date", "Date")))
 
     attributes <-
       data.frame(

@@ -91,7 +91,7 @@ to_docbook <- function(file = NULL) {
       options = "-s"
     )
     docbook <- xml2::read_xml(docbook_file)
-    setwd(wd)
+    on.exit(setwd(wd))
 
   } else {
     ## File is already xml/docbook, so no need for pandoc
