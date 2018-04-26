@@ -131,7 +131,7 @@ set_temporalCoverage <-
 #' EML permits any rank names provided they go in descending order.
 #'
 #' @export
-#'
+#' @importFrom methods is
 #' @examples
 #'
 #' sci_names <- data.frame(Kingdom="Plantae",

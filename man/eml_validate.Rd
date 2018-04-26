@@ -23,6 +23,9 @@ eml_validate processes an EML document using the XSD schema for the
 appropriate version of EML and determines if the document is schema-valid
 as defined by the XSD specification
 }
+\note{
+this function is simply an alias to `eml_validate` in `emld` package
+}
 \examples{
 \donttest{
 
