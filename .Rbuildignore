@@ -9,3 +9,4 @@ EML_vignettes/*
 ^\.travis\.yml$
 ^codecov\.yml$
 ^paper/
+^codemeta\.json$

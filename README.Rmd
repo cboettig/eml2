@@ -1,7 +1,7 @@
 ---
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm
 ---
 
 [![Build Status](https://travis-ci.org/cboettig/eml2.svg?branch=master)](https://travis-ci.org/cboettig/eml2)
@@ -44,14 +44,14 @@ library(eml2)
 
 ```{r}
 me <- list(individualName = list(givenName = "Carl", surName = "Boettiger"))
-eml <- list(dataset = list(
+my_eml <- list(dataset = list(
               title = "A Mimimal Valid EML Dataset",
               creator = me,
               contact = me)
             )
 
 
-write_eml(eml, "ex.xml")
+write_eml(my_eml, "ex.xml")
 eml_validate("ex.xml")
 ```
 
@@ -158,13 +158,13 @@ Of course, this assumes that we have some knowledge of what the possible terms p
 ## Constructor methods
 
 
-For instance, the function `construct$creator()` has function arguments corresponding to each possible slot for a creator.  This means we can rely on *tab completion* (and/or autocomplete previews in RStudio) to see what the possible options are.  `construct$` functions exist for all complex types.  If `construct$` does not exist for an argument (e.g. there is no `construct$givenName`), then the field takes a simple string argument. 
+For instance, the function `eml$creator()` has function arguments corresponding to each possible slot for a creator.  This means we can rely on *tab completion* (and/or autocomplete previews in RStudio) to see what the possible options are.  `eml$` functions exist for all complex types.  If `eml$` does not exist for an argument (e.g. there is no `eml$givenName`), then the field takes a simple string argument. 
 
 ### Creating parties (creator, contact, publisher)
 
 ```{r}
-aaron <- construct$creator(
-  individualName = construct$individualName(
+aaron <- eml$creator(
+  individualName = eml$individualName(
     givenName = "Aaron", 
     surName = "Ellison"),
   electronicMailAddress = "fakeaddress@email.com")
@@ -172,7 +172,7 @@ aaron <- construct$creator(
 
 
 ```{r}
-HF_address <- construct$address(
+HF_address <- eml$address(
                   deliveryPoint = "324 North Main Street",
                   city = "Petersham",
                   administrativeArea = "MA",
@@ -181,7 +181,7 @@ HF_address <- construct$address(
 ```
 
 ```{r}
-publisher <- construct$publisher(
+publisher <- eml$publisher(
                  organizationName = "Harvard Forest",
                  address = HF_address)
 ```
@@ -202,10 +202,10 @@ contact <-
 
 
 ```{r}
-eml <- construct$eml(
+my_eml <- eml$eml(
            packageId = uuid::UUIDgenerate(),  
            system = "uuid",
-           dataset = construct$dataset(
+           dataset = eml$dataset(
                title = "Thresholds and Tipping Points in a Sarracenia",
                creator = aaron,
                pubDate = "2012",
@@ -215,7 +215,7 @@ eml <- construct$eml(
                coverage = coverage,
                contact = contact,
                methods = methods,
-               dataTable = construct$dataTable(
+               dataTable = eml$dataTable(
                  entityName = "hf205-01-TPexp1.csv",
                  entityDescription = "tipping point experiment 1",
                  physical = physical,
@@ -226,9 +226,11 @@ eml <- construct$eml(
 
 ## Serialize and validate
 
+We can also validate first and then serialize:
+
 ```{r}
-write_eml(eml, "eml.xml")
-eml_validate("eml.xml")
+eml_validate(my_eml)
+write_eml(my_eml, "eml.xml")
 ```
 
 
@@ -238,5 +240,7 @@ eml_validate("eml.xml")
 
 ```{r include = FALSE}
 unlink("eml.xml")
+unlink("ex.xml")
+codemetar::write_codemeta()
 ```
 
