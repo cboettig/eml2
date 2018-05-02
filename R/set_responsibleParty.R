@@ -9,6 +9,7 @@
 #' @param electronicMailAddress email address (alternatively, can use 'email' argument)
 #' @param onlineUrl a URL to the homepage of the individual or organization
 #' @param userId the user's ID, usually within a particular system (KNB, DataONE)
+#' @param id Identifier for this plock, ideally an ORCID id (optional)
 #' @param email alias for electronicMailAddress
 #'
 #' @return A emld object for any responsibleParty (e.g. creator, contact, etc)
@@ -27,6 +28,7 @@ set_responsibleParty <-
             electronicMailAddress = NULL,
             onlineUrl = NULL,
             userId = NULL,
+            id = NULL,
             email = NULL) {
     UseMethod("set_responsibleParty", givenName)
   }
@@ -48,6 +50,7 @@ set_responsibleParty.character <-
             electronicMailAddress = NULL,
             onlineUrl = NULL,
             userId = NULL,
+            id = NULL,
             email = NULL) {
     emld::as_emld(list(
       individualName = list(givenName = givenName, surName = surName),
@@ -62,7 +65,8 @@ set_responsibleParty.character <-
           electronicMailAddress
         },
       onlineUrl = onlineUrl,
-      userId = userId)
+      userId = userId,
+      "@id" = id)
     )
 
   }

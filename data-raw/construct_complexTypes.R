@@ -3,6 +3,7 @@
 #names(who) <- who
 #construct <- lapply(who, template_constructor)
 
+options("emld_db" = "eml-2.1.1")
 ## Full database
 db <- purrr::compact(
   jsonlite::read_json("https://raw.githubusercontent.com/cboettig/emld/master/data-raw/eml_db.json"))

@@ -7,7 +7,7 @@
 set_responsibleParty(givenName = NULL, surName = NULL,
   organizationName = NULL, positionName = NULL, address = NULL,
   phone = NULL, electronicMailAddress = NULL, onlineUrl = NULL,
-  userId = NULL, email = NULL)
+  userId = NULL, id = NULL, email = NULL)
 }
 \arguments{
 \item{givenName}{individual's given names (list or vector for multiple names).  OR a person object.}
@@ -27,6 +27,8 @@ set_responsibleParty(givenName = NULL, surName = NULL,
 \item{onlineUrl}{a URL to the homepage of the individual or organization}
 
 \item{userId}{the user's ID, usually within a particular system (KNB, DataONE)}
+
+\item{id}{Identifier for this plock, ideally an ORCID id (optional)}
 
 \item{email}{alias for electronicMailAddress}
 }
