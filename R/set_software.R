@@ -127,5 +127,5 @@ schema_to_eml <- function(x){
   ))
 }
 
-## quiets concerns of R CMD check re: the .'s that appear in pipelines
+## quiets concerns of R CMD check re: the "data" object 'eml'
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("eml"))
