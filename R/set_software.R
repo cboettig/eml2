@@ -4,14 +4,12 @@
 #' @return an eml software element
 #' @export
 #' @examples
-#' options(emld_db = "eml-2.1.1",
-#'         emld_schemaLocation="eml://ecoinformatics.org/eml-2.1.1/")
 #' cm <- jsonlite::read_json(system.file("extdata/codemeta.json", package="eml2"))
 #' software <- set_software(cm)
 #' my_eml <- eml$eml(packageId = "eml-1.2",system = "knb", software = software)
-#' eml_validate(my_eml)
 #'
-#' # write_eml(my_eml, "eml.xml")
+#' # write_eml(my_eml, "test.xml")
+#'
 set_software <- function(codemeta){
 
   cm <- codemeta
