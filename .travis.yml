@@ -19,7 +19,6 @@ addons:
       - libv8-dev
       - libjq-dev
       - libudunits2-dev
-before_install:
-  - Rscript -e 'install.packages("units")'
+
 after_success:
   - Rscript -e 'covr::codecov()'
