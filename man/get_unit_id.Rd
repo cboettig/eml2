@@ -20,11 +20,11 @@ A function to assist with getting valid EML unit ids. See examples.
 \examples{
 \dontrun{
 #The following all return the same id
-get_eml_unit_id('kilometersPerSquareSecond')
-get_eml_unit_id('kilometerPerSecondSquared')
-get_eml_unit_id('Kilometers per seconds squared')
-get_eml_unit_id('km/s^2')
-get_eml_unit_id('km s-2')
-get_eml_unit_id('s-2 /     kilometers-1') # this works but is not advised
+get_unit_id('kilometersPerSquareSecond')
+get_unit_id('kilometerPerSecondSquared')
+get_unit_id('Kilometers per seconds squared')
+get_unit_id('km/s^2')
+get_unit_id('km s-2')
+get_unit_id('s-2 /     kilometers-1') # this works but is not advised
 }
 }

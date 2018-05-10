@@ -8,12 +8,12 @@
 #' @examples
 #' \dontrun{
 #' #The following all return the same id
-#' get_eml_unit_id('kilometersPerSquareSecond')
-#' get_eml_unit_id('kilometerPerSecondSquared')
-#' get_eml_unit_id('Kilometers per seconds squared')
-#' get_eml_unit_id('km/s^2')
-#' get_eml_unit_id('km s-2')
-#' get_eml_unit_id('s-2 /     kilometers-1') # this works but is not advised
+#' get_unit_id('kilometersPerSquareSecond')
+#' get_unit_id('kilometerPerSecondSquared')
+#' get_unit_id('Kilometers per seconds squared')
+#' get_unit_id('km/s^2')
+#' get_unit_id('km s-2')
+#' get_unit_id('s-2 /     kilometers-1') # this works but is not advised
 #' }
 #' @export
 get_unit_id <- function(unit, eml_version = getOption("emld_db", "eml-2.2.0")) {
@@ -94,11 +94,11 @@ format_split_unit <- function(split_unit,
   f_split_unit <- sapply(split_unit, function (x) {
 
     ## Check if the split unit is symbolic
-    singular_standard <- unique(udunits_units$singular_standard[which(tolower(x[1]) == udunits_units$symbol)])
+    singular_standard <- unique(udunits_units$singular_standard[which(x[1] == udunits_units$symbol)])
 
     if (length(singular_standard) != 1) {
       ## Check if the split unit is plural
-      singular_standard <- unique(udunits_units$singular_standard[which(tolower(x[1]) == udunits_units$name_plural)])
+      singular_standard <- unique(udunits_units$singular_standard[which(x[1] == udunits_units$name_plural)])
     }
 
     if (length(singular_standard) == 1) {
