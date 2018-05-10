@@ -21,7 +21,9 @@ Suggests: knitr,
     tibble,
     testthat,
     covr,
-    EML
+    EML,
+    units,
+    memoise
 Imports: xml2, methods, digest, emld, jqr, jsonlite, uuid
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000

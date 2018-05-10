@@ -90,15 +90,27 @@ When writing our own EML files, we must thus take care to define our units.
 
 For tabular data (e.g. csv files), this information is provided in the `attributeList` element, such as we created using the `set_attributes()` function in the vignette, "creating EML". When working with any numeric data, this function takes a `data.frame` with a column for `unit` that provides the name of the unit listed.  
 
-These units cannot be any free-form text, but should instead be one of the standard units recognized by EML. Since EML knows about lots of units already, this usually just means making sure we use the correct `id` for the desired unit in the attributes metadata.  As we have seen above, the `standardUnits` list can help us with this. We can just skim the table by eye, or, for instance, we can look up the unit `id` for a some units by abbreviation:
+These units cannot be any free-form text, but should instead be one of the standard units recognized by EML. Since EML knows about lots of units already, this usually just means making sure we use the correct `id` for the desired unit in the attributes metadata.  As we have seen above, the `standardUnits` list can help us with this. We can just skim that table by eye, or we can look up the unit `id` for units using the function `get_eml_unit_id`:
 
 ```{r}
-i <- which(standardUnits$units$abbr == "btu")
-j <- which(standardUnits$units$abbr == "μm³/kg")
-standardUnits$units[c(i,j),]
+get_unit_id("kg/m²")
+get_unit_id("kg per m^2")
+get_unit_id("kg m^-2")
 ```
 
-note that EML names units in camelCase, with compound units spelled out.  We will need to give the full unit `id`, not the abbreviation, to the units column when defining attribute metadata, e.g.:
+or
+
+```{r}
+get_unit_id("btu")
+```
+
+If there isn't a standard unit for the unit we look up, `get_eml_unit_id` will give a warning and create a camelCased EML unit id that can be used as the basis of a new custom unit.
+
+```{r}
+get_unit_id("count/m^2")
+```
+
+Note that EML names units in camelCase, with compound units spelled out.  We will need to give the full unit `id` to the units column when defining attribute metadata, e.g.:
 
 ```{r}
 df <- data.frame(attributeName = "energy", 
