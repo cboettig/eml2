@@ -70,8 +70,9 @@ attributeList <-
                                  "numeric"))
 
 ## ------------------------------------------------------------------------
-expect_message(physical <- set_physical("hf205-01-TPexp1.csv"),
-               "calculated file size")
+physical <- set_physical("hf205-01-TPexp1.csv")
+#testthat::expect_message(physical <- set_physical("hf205-01-TPexp1.csv"),
+#               "calculated file size")
 
 ## ------------------------------------------------------------------------
 dataTable <- list(
