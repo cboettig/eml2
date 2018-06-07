@@ -22,15 +22,22 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 2.10)
 Suggests: knitr,
-    rmarkdown,
     taxize,
     tibble,
     testthat,
     covr,
-    EML,
-    units,
+    EML, 
+    units, 
     memoise
-Imports: xml2, methods, digest, emld, jqr, jsonlite, uuid
+Imports: xml2, 
+    methods, 
+    digest, 
+    emld (>= 0.0.0.9900), 
+    jqr, 
+    jsonlite, 
+    uuid,
+    rmarkdown,
+    utils
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
 Remotes: cboettig/emld
