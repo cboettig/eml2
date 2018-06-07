@@ -51,9 +51,20 @@ set_TextType <- function(file = NULL, text = NULL) {
 }
 
 
+
 #' @importFrom xml2 xml_find_all xml_children xml_contents read_xml
+#' @importFrom utils compareVersion
+#' @importFrom rmarkdown pandoc_version
 set_section <- function(docbook) {
-  lapply(xml2::xml_find_all(docbook, "/article/sect1"),
+  ## Argh, section tag name changes in different versions of pandoc!!
+  if(utils::compareVersion(
+     as.character(rmarkdown::pandoc_version()),
+     "2.0") == 1){
+    xpath <- "/article/section"
+  } else {
+    xpath <- "/article/sect1"
+  }
+  lapply(xml2::xml_find_all(docbook, xpath),
          function(x)
            paste(lapply(xml2::xml_children(x), as.character),
                  collapse = "\n")
@@ -67,7 +78,7 @@ set_para <-  function(docbook) {
          function(x) as.character(xml2::xml_contents(x)))
 }
 
-
+#' @importFrom xml2 xml_ns_strip
 to_docbook <- function(file = NULL) {
   if (!tools::file_ext(file) %in% c("xml", "dbk", "db")) {
     ## Not xml yet, so use pandoc to generate docbook
@@ -99,6 +110,7 @@ to_docbook <- function(file = NULL) {
   }
 
   ## Unlike EML, treat this as literal!
+  xml2::xml_ns_strip(docbook)
   docbook
 
 }
