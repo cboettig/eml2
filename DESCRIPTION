@@ -31,7 +31,8 @@ Imports: xml2,
     jsonlite, 
     uuid,
     rmarkdown,
-    utils
+    utils,
+    data.table
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1.9000
 Remotes: cboettig/emld
