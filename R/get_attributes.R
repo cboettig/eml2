@@ -10,7 +10,7 @@
 #' declared elsewhere in the document.  This function will automatically resolve these references
 #' and thus infer the correct metadata.
 #' @export
-#' @importFrom data.table rbindlist
+#' @importFrom dplyr bind_rows
 #' @examples
 #' eml <- read_eml(system.file("xsd/test/eml-datasetWithAttributelevelMethods.xml", package = "EML"))
 #' get_attributes(eml$dataset$dataTable$attributeList)
@@ -65,7 +65,7 @@ get_attributes <- function(x, eml = NULL) {
     names(atts) <- gsub(".+\\.+", "", names(atts))
     atts <- as.data.frame(t(atts), stringsAsFactors = FALSE)
   })
-  attributes <- as.data.frame(data.table::rbindlist(attributes, fill = TRUE))
+  attributes <- dplyr::bind_rows(attributes)
 
   ## remove non_fields in attributes
   non_fields <- c("enforced", "exclusive", "id", "order", "references", "scope", "system", "typeSystem")
@@ -85,7 +85,7 @@ get_attributes <- function(x, eml = NULL) {
     factors$attributeName <- x$attributeName
     return(factors)
   })
-  factors <- as.data.frame(data.table::rbindlist(factors, fill = TRUE))
+  factors <- dplyr::bind_rows(factors)
   factors <- factors[!is.na(factors$code), ]
 
   # FIXME: add support for methods
