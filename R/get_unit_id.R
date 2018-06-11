@@ -66,9 +66,16 @@ get_unit_id <- function(input_units, eml_version = getOption("emld_db", "eml-2.2
                                error = function(e) {""}
                                )
       f_split_unit <- unlist(f_split_unit)
+
+      ## combine and collapse unit
+      if (length(f_split_unit) > 0) {
       id <- paste(c(f_split_unit[1],
                     sapply(f_split_unit[-1], function(x) gsub("(^[[:alpha:]]?)", "\\U\\1", x, perl = TRUE))),
                   collapse = "")
+
+      } else {
+        id <-  ""
+      }
 
       if (id == "") {
         warning(call. = FALSE,
