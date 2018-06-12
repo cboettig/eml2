@@ -28,7 +28,10 @@ Suggests: knitr,
     covr,
     EML, 
     units, 
-    memoise
+    memoise,
+    htmlwidgets,
+    shiny,
+    shinyjs
 Imports: xml2, 
     methods, 
     digest, 
