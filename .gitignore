@@ -6,3 +6,4 @@ inst/doc
 *.pdf
 *.spl
 *.tex
+*.DS_Store

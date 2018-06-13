@@ -1,8 +1,8 @@
 #' get_unit_id
 #'
-#' @description A function to assist with getting valid EML unit ids. See examples.
+#' @description A function to assist with getting valid EML unit ids (see examples). Warning: ensure returned unit is equivalent to input unit (for example "pH" will return "picohenry" which may or may not be equivalent to the input unit "pH").
 #'
-#' @param unit (character) unit that needs a valid EML unit id
+#' @param input_units (character|vector) input units that needs valid EML unit ids
 #' @param eml_version (character) the eml schema version desired (there is a change in the way eml units are named from eml-2.1.1 to eml-2.2.0)
 #' @return (character) A valid EML unit id. If no valid EML unit id can be found, the function will output a warning, along with a preformatted custom unit id.
 #' @examples
@@ -16,7 +16,7 @@
 #' get_unit_id('s-2 /     kilometers-1') # this works but is not advised
 #' }
 #' @export
-get_unit_id <- function(unit, eml_version = getOption("emld_db", "eml-2.2.0")) {
+get_unit_id <- function(input_units, eml_version = getOption("emld_db", "eml-2.2.0")) {
 
   if (!requireNamespace("units", quietly = TRUE)) {
     stop(call. = FALSE,
@@ -24,9 +24,9 @@ get_unit_id <- function(unit, eml_version = getOption("emld_db", "eml-2.2.0")) {
          'units' package to be installed. Install units package for this functionality.")
   }
 
-  if (!is.character(unit) || nchar(unit) == 0) {
+  if (!is.character(input_units)) {
     stop(call. = FALSE,
-         "input unit must be a non-empty character")
+         "input_units must be characters")
   }
 
   ## Load udunits library
@@ -48,38 +48,47 @@ get_unit_id <- function(unit, eml_version = getOption("emld_db", "eml-2.2.0")) {
   ## Get EML units
   eml_units <- get_unitList()$units
 
-  ## Check if unit is an eml abbreviation
-  eml_abbr <- which(unit == eml_units$abbreviation)
+  unlist(sapply(input_units, function(unit) {
 
-  ## Get eml unit id
-  if (is_standardUnit(unit)) {
-    id <- unit
+    ## Check if unit is an eml abbreviation
+    eml_abbr <- which(unit == eml_units$abbreviation)
 
-  } else if (length(eml_abbr) == 1) {
-    id <-  eml_units$id[eml_abbr]
+    ## Get eml unit id
+    if (is_standardUnit(unit)) {
+      id <- unit
 
-  } else {
+    } else if (length(eml_abbr) == 1) {
+      id <-  eml_units$id[eml_abbr]
 
-    split_unit <- get_split_unit(unit, exponents) # Split the unit into individual units
-    f_split_unit <- format_split_unit(split_unit, exponents, eml_version, udunits_units) # Format the split unit
-    f_split_unit <- unlist(f_split_unit)
-    id <- paste(c(f_split_unit[1],
-                  sapply(f_split_unit[-1], function(x) gsub("(^[[:alpha:]]?)", "\\U\\1", x, perl = TRUE))),
-                collapse = "")
+    } else {
+      split_unit <- get_split_unit(unit, exponents) # Split the unit into individual units
+      f_split_unit <- tryCatch({format_split_unit(split_unit, exponents, eml_version, udunits_units)},
+                               error = function(e) {""}
+                               )
+      f_split_unit <- unlist(f_split_unit)
 
-    if (id == "") {
-      warning(call. = FALSE,
-              "unit cannot be converted to a standard EML form")
+      ## combine and collapse unit
+      if (length(f_split_unit) > 0) {
+      id <- paste(c(f_split_unit[1],
+                    sapply(f_split_unit[-1], function(x) gsub("(^[[:alpha:]]?)", "\\U\\1", x, perl = TRUE))),
+                  collapse = "")
+
+      } else {
+        id <-  ""
+      }
+
+      if (id == "") {
+        warning(call. = FALSE,
+                "'", unit, "' cannot be converted to a standard EML form")
+
+      } else if (!is_standardUnit(id)) {
+        warning(call. = FALSE,
+                "'", id, "' is not a standard eml unit, a custom unit will be needed")
+      }
     }
 
-    ## Is id valid EML id?
-    if (!is_standardUnit(id)) {
-      warning(call. = FALSE,
-              "unit is not a standard eml unit, a custom unit will be needed")
-    }
-  }
-
-  return(id)
+    return(id)
+  }))
 }
 
 format_split_unit <- function(split_unit,
@@ -110,8 +119,11 @@ format_split_unit <- function(split_unit,
       is_denominator <- grepl("^-", x[2])
       exp_value <- gsub("[^[:digit:]]", "", x[2])
 
+      if (as.numeric(exp_value) > 3) {
+        stop("only exponents up to 3 are supported by EML")
+
       ## If greater_2.2.0 use following exponents (e.g. second squared)
-      if (greater_2.2.0) {
+      } else if (greater_2.2.0) {
         x[2] <- exponents$following[which(exp_value == exponents$numeric)]
 
         ## If not use preceeding exponents (e.g. square second)
@@ -148,10 +160,16 @@ get_split_unit <- function(unit, exponents) {
   unit <- gsub("\u03BC", "\u00B5", unit)
 
   ## Separate string at capitals or operators (e.g. metersPerSecond or m/s)
-  pattern <- paste0("([[:upper:]\\/*", paste(exponents$symbolic, collapse = ""), "])")
-  unit <- gsub(pattern," \\1", unit)
+  unit <- gsub("([^_ ])([[:upper:]])", "\\1 \\2", unit) # Split at capitals
+  unit <- gsub(paste0("([^[:alpha:]]|^)(",
+               paste(suppressMessages(units::valid_udunits_prefixes()$symbol), collapse = "|"),
+               ")( )([[:upper:]])"),
+               "\\1\\2\\4",
+               unit) # merge back separated prefixes (e.g. "k W" to "kW")
+  unit <- gsub("(\\/|\\*)"," \\1", unit)
 
   ## Convert exponents to numeric exponents
+  unit <- gsub("-","- ", unit)
   unit_split <- as.list(strsplit(unit, "[[:blank:]]+")[[1]])
   for (i in rev(seq_along(unit_split))) {
     x <- tolower(unit_split[i])
@@ -172,7 +190,8 @@ get_split_unit <- function(unit, exponents) {
 
   }
   unit <- paste(unit_split, collapse = " ")
-  unit <- gsub("[[:blank:]]([[:digit:]])", "\\1", unit)
+  unit <- gsub("- ","-", unit)
+  unit <- gsub("[[:blank:]](-*[[:digit:]])", "\\1", unit)
 
   # Use units package and regex to try to get valid units
   unit <- suppressWarnings(tryCatch({

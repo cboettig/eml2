@@ -4,10 +4,10 @@
 \alias{get_unit_id}
 \title{get_unit_id}
 \usage{
-get_unit_id(unit, eml_version = getOption("emld_db", "eml-2.2.0"))
+get_unit_id(input_units, eml_version = getOption("emld_db", "eml-2.2.0"))
 }
 \arguments{
-\item{unit}{(character) unit that needs a valid EML unit id}
+\item{input_units}{(character|vector) input units that needs valid EML unit ids}
 
 \item{eml_version}{(character) the eml schema version desired (there is a change in the way eml units are named from eml-2.1.1 to eml-2.2.0)}
 }
@@ -15,7 +15,7 @@ get_unit_id(unit, eml_version = getOption("emld_db", "eml-2.2.0"))
 (character) A valid EML unit id. If no valid EML unit id can be found, the function will output a warning, along with a preformatted custom unit id.
 }
 \description{
-A function to assist with getting valid EML unit ids. See examples.
+A function to assist with getting valid EML unit ids (see examples). Warning: ensure returned unit is equivalent to input unit (for example "pH" will return "picohenry" which may or may not be equivalent to the input unit "pH").
 }
 \examples{
 \dontrun{
