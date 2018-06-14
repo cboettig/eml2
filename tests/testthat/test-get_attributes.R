@@ -11,6 +11,7 @@ testthat::test_that("get_attributes returns attributes", {
 
   testthat::expect_gt(nrow(attributes), 0)
   testthat::expect_gt(ncol(attributes), 0)
+  testthat::expect_null(factors)
 })
 
 testthat::test_that("get_attributes returns attributes and factors", {
