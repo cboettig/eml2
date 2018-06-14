@@ -82,11 +82,21 @@ get_attributes <- function(x, eml = NULL) {
       as.data.frame(x, stringsAsFactors = FALSE)
     })
     factors <- do.call(rbind, factors)
-    factors$attributeName <- x$attributeName
+
+    if (!is.null(factors)) {
+      factors$attributeName <- x$attributeName
+    }
+
     return(factors)
   })
   factors <- dplyr::bind_rows(factors)
+
+  if (nrow(factors) > 0) {
   factors <- factors[!is.na(factors$code), ]
+
+  } else {
+    factors <- NULL
+  }
 
   # FIXME: add support for methods
 
