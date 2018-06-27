@@ -5,7 +5,7 @@
 #' @param element name of the element to be extracted.
 #' If multiple occurrences are found, will extract all
 #' @param from explicit type for the input format. Possible values:
-#' "xml", "json", "list", or "guess" with "xml" as the default.
+#' "xml", "json", "list", or "guess" with "list" as the default.
 #' @param ... additional arguments
 #'
 #' @examples \donttest{
@@ -21,7 +21,7 @@
 #' @importFrom jqr jq combine
 #' @importFrom emld as_json as_emld
 #' @importFrom jsonlite fromJSON
-eml_get <- function(x, element, from = "xml", ...){
+eml_get <- function(x, element, from = "list", ...){
   doc <- as.character(emld::as_json(emld::as_emld(x, from = from)))
   out <- jqr::jq(doc, paste0("..|.", element, "? // empty"))
   json <- jqr::combine(out)

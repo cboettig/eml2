@@ -6,7 +6,7 @@ emld::as_emld
 #' @importFrom emld as_emld
 #' @method as_emld person
 #' @export
-as_emld.person <- function(x){
+as_emld.person <- function(x, from = "list"){
 
   tmp <- function(x){
     orcid <- x$comment[["ORCID"]]
