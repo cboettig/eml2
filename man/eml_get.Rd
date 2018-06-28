@@ -4,13 +4,16 @@
 \alias{eml_get}
 \title{eml_get}
 \usage{
-eml_get(x, element, ...)
+eml_get(x, element, from = "list", ...)
 }
 \arguments{
 \item{x}{an EML object or child/descendant object}
 
 \item{element}{name of the element to be extracted.
 If multiple occurrences are found, will extract all}
+
+\item{from}{explicit type for the input format. Possible values:
+"xml", "json", "list", or "guess" with "list" as the default.}
 
 \item{...}{additional arguments}
 }

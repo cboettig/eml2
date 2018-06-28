@@ -4,16 +4,19 @@
 \alias{read_eml}
 \title{read_eml}
 \usage{
-read_eml(x)
+read_eml(x, from = "xml")
 }
 \arguments{
 \item{x}{path to an EML file}
+
+\item{from}{explicit type for the input format. Possible values:
+"xml", "json", "list", or "guess" with "xml" as the default.}
 }
 \value{
 an emld object (list / S3 object)
 }
 \description{
-read_eml
+Read an EML file into R as an emld object.
 }
 \examples{
 f <- system.file("extdata", "example.xml", package = "emld")
