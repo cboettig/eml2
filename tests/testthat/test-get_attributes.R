@@ -44,6 +44,7 @@ testthat::test_that("get_attributes works with references", {
 
   testthat::expect_warning(get_attributes(x))
 
+  x <- eml$dataset$dataTable[[1]]$attributeList
   df <- get_attributes(x, eml)
   attributes <- df$attributes
   factors <- df$factors
