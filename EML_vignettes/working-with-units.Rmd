@@ -56,11 +56,6 @@ my_eml <- list(dataset = list(
 
 
 ```{r}
-#emld::as_xml(as_emld(my_eml), "eml-with-units.xml")
-#emld::as_json(as_emld(my_eml), "eml-with-units.json")
-```
-
-```{r}
 write_eml(my_eml, "eml-with-units.xml")
 eml_validate("eml-with-units.xml")
 ```
