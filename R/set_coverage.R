@@ -167,10 +167,10 @@ set_temporalCoverage <-
 
 set_taxonomicCoverage <- function(sci_names, expand=FALSE, db = 'itis') {
   # Expand using taxize and ITIS if the user passes in just scientific names
-  if (is(sci_names, "character") && expand) {
+  if (is.character(sci_names) && expand) {
     sci_names <- expand_scinames(sci_names, db)
   }
-  if (class(sci_names) == "character" & !expand) {
+  if (is.character(sci_names) && !expand) {
     taxa <- lapply(strsplit(sci_names, " "), function(s) {
       list(
         taxonRankName = "Genus",
@@ -182,9 +182,9 @@ set_taxonomicCoverage <- function(sci_names, expand=FALSE, db = 'itis') {
     list(taxonomicClassification =  taxa)
 
 
-  } else if (class(sci_names) == "data.frame") {
+  } else if (is.data.frame(sci_names)) {
     set_taxonomicCoverage.data.frame(sci_names)
-  } else if (class(sci_names) == "list") {
+  } else if (is.list(sci_names)) {
     set_taxonomicCoverage.list(sci_names)
   } else {
     stop("Incorrect format: sci_names
