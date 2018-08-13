@@ -1,7 +1,7 @@
 #' set_physical
 #'
-#' Will calculate the file size, checksum, and checksum algorithm automatically
-#' if the argument \code{objectName} is a file that exists.
+#' Will calculate the file size, checksum, and checksum authentication method
+#' algorithm automatically if the argument \code{objectName} is a file that exists.
 #'
 #' @param objectName name for the object, usually a filename like "hf205-1.csv"
 #' @param id optional, an id value for the <physical> element in EML, for use in referencing
@@ -74,7 +74,7 @@ set_physical <- function(objectName,
       ))
       size <- as.character(file.size(objectName))
     }
-    size <- list(size = size, unit = sizeUnit)
+
 
     if (length(authentication) == 0) {
       message(paste0(
@@ -83,12 +83,14 @@ set_physical <- function(objectName,
       authentication <- digest::digest(objectName, algo = "md5", file = TRUE)
       authMethod <- "MD5"
     }
-    authentication <- list(authentication = authentication, method = authMethod)
-    # Fore the objectName to be set to the basename for the path just in case
+    # For the objectName to be set to the basename for the path just in case
     # the user intended this
     objectName <- basename(objectName)
   }
-
+  authentication <- list(authentication = authentication, method = authMethod)
+  if (!is.null(size)) {
+    size <- list(size = size, unit = sizeUnit)
+  }
   out <-
     list(
       objectName = objectName,
