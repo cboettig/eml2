@@ -1,9 +1,0 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-inst/doc
-*.pdf
-*.spl
-*.tex
-*.DS_Store
