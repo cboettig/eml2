@@ -13,7 +13,10 @@
 #'
 #' # Read in additional units defined in a EML file
 #' \donttest{
-#' f <- system.file("xsd/test/eml-datasetWithUnits.xml", package = "EML")
+#' f <- system.file("tests", options("emld_db"),
+#'   "eml-datasetWithUnits.xml",
+#'   package = "emld"
+#' )
 #' eml <- read_eml(f)
 #' unitList <- get_unitList(eml)
 #'
@@ -23,20 +26,24 @@
 #'
 get_unitList <-
   function(x = NULL) {
-
-    if(is.null(x)){
-     unitList <- read_eml(system.file("xsd/eml-2.1.1/eml-unitDictionary.xml",
-                         package = "EML"))
+    if (is.null(x)) {
+      unitList <- read_eml(system.file("tests",
+        options("emld_db"),
+        "eml-unitDictionary.xml",
+        package = "emld"
+      ))
     } else {
       unitList <- eml_get(x, "unitList")
     }
-    list(units = get_unit(unitList$unit),
-         unitTypes = get_unitType(unitList$unitType))
+    list(
+      units = get_unit(unitList$unit),
+      unitTypes = get_unitType(unitList$unitType)
+    )
   }
 
 
 
-get_unit <- function(unit){
+get_unit <- function(unit) {
   ## Unnested structure, easy to rectangle
   fromJSON(toJSON(unit))
 }
@@ -44,13 +51,14 @@ get_unit <- function(unit){
 #' @importFrom jsonlite toJSON fromJSON
 get_unitType <- function(unitType) {
   ## Nested data structure, rectangle via jq
-    y <- toJSON(unitType)
+  y <- toJSON(unitType)
 
-    tmp <- jqr::jq(as.character(y), '.[] | {
-            id,
-            name,
-            dimension: .dimension[].name?,
-            power: .dimension[].power?
-            }')
-    fromJSON(jqr::combine(tmp))
+  tmp <- jqr::jq(as.character(y),
+    ".[] | {
+             id,
+             name,
+             dimension: .dimension[].name?,
+             power: .dimension[].power?
+            }")
+  fromJSON(jqr::combine(tmp))
 }
